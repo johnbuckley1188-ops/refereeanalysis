@@ -1348,8 +1348,12 @@ async function renderIRFU(){
       <button id="irfu-notes-filter-btn" class="irfu-filter-btn${IRFU_FILTER_HAS_NOTES?' active':''}" onclick="irfuToggleNotesFilter()">
         <span>📝</span> Has Notes${IRFU_FILTER_HAS_NOTES?' ✓':''}
       </button>
-      <button class="irfu-filter-btn" onclick="irfuImportAppointments()" style="gap:5px">
-        <span>📋</span> Import Sep–Oct Appointments
+      <button class="irfu-filter-btn" onclick="document.getElementById('irfu-csv-input').click()" style="gap:5px" title="Upload a CSV of appointments">
+        <span>📋</span> Upload Appointments
+      </button>
+      <input type="file" id="irfu-csv-input" accept=".csv" style="display:none" onchange="irfuHandleCSVUpload(this)">
+      <button class="irfu-filter-btn" onclick="irfuDownloadCSVTemplate()" style="gap:5px;opacity:0.7" title="Download blank CSV template">
+        <span>⬇️</span> CSV Template
       </button>
     </div>
     <div class="irfu-board">${catHTML}</div>
@@ -1430,8 +1434,71 @@ function irfuIsImportedEntry(it){
   // Identifies entries added by the import function (format: "Comp: Home vs Away — Venue")
   return it&&it.text&&it.text.includes(' vs ')&&(it.text.includes('—')||it.text.includes('—'));
 }
-async function irfuImportAppointments(){
-  if(!IRFU_APPOINTMENTS||!IRFU_APPOINTMENTS.length){alert('No appointments data found.');return;}
+function irfuDownloadCSVTemplate(){
+  const rows=[
+    ['Referee','Date','Competition','Home','Away','Venue','Time','Role'],
+    ['John Murphy','2026-10-05','URC','Leinster','Munster','Aviva Stadium','14:00','Referee'],
+    ['Jane Smith','2026-10-12','AIL 1A','Lansdowne','Clontarf','Aviva Stadium','14:30','Referee'],
+  ];
+  const csv=rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='appointments_template.csv';
+  a.click();
+}
+function irfuHandleCSVUpload(input){
+  const file=input.files[0];if(!file)return;
+  // Reset input so same file can be re-uploaded
+  input.value='';
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const text=e.target.result;
+    const lines=text.split(/\r?\n/).filter(l=>l.trim());
+    if(lines.length<2){alert('CSV appears empty — check the file.');return;}
+    // Parse header row (case-insensitive)
+    const header=lines[0].split(',').map(h=>h.replace(/^"|"$/g,'').trim().toLowerCase());
+    const col=n=>header.indexOf(n);
+    const iRef=col('referee'),iDate=col('date'),iComp=col('competition'),
+          iHome=col('home'),iAway=col('away'),iVenue=col('venue'),
+          iTime=col('time'),iRole=col('role');
+    if(iRef<0||iDate<0||iComp<0||iHome<0||iAway<0){
+      alert('CSV is missing required columns.\nExpected: Referee, Date, Competition, Home, Away\nOptional: Venue, Time, Role\n\nUse the "CSV Template" button to download the correct format.');
+      return;
+    }
+    function parseCSVRow(line){
+      const vals=[];let cur='',inQ=false;
+      for(let i=0;i<line.length;i++){
+        const c=line[i];
+        if(c==='"'){inQ=!inQ;}
+        else if(c===','&&!inQ){vals.push(cur.trim());cur='';}
+        else cur+=c;
+      }
+      vals.push(cur.trim());
+      return vals;
+    }
+    const appointments=[];
+    for(let i=1;i<lines.length;i++){
+      const vals=parseCSVRow(lines[i]);
+      const ref=(vals[iRef]||'').replace(/^"|"$/g,'').trim();
+      const date=(vals[iDate]||'').replace(/^"|"$/g,'').trim();
+      if(!ref||!date)continue;
+      appointments.push({
+        ref,date,
+        comp:(vals[iComp]||'').replace(/^"|"$/g,'').trim(),
+        home:(vals[iHome]||'').replace(/^"|"$/g,'').trim(),
+        away:(vals[iAway]||'').replace(/^"|"$/g,'').trim(),
+        venue:iVenue>=0?(vals[iVenue]||'').replace(/^"|"$/g,'').trim():'',
+        time:iTime>=0?(vals[iTime]||'').replace(/^"|"$/g,'').trim():'',
+        role:iRole>=0?(vals[iRole]||'').replace(/^"|"$/g,'').trim():'Referee',
+      });
+    }
+    if(!appointments.length){alert('No valid rows found in CSV. Check the file format.');return;}
+    await irfuImportAppointments(appointments);
+  };
+  reader.readAsText(file);
+}
+async function irfuImportAppointments(appointments){
+  if(!appointments||!appointments.length){alert('No appointments data found.');return;}
   const user=firebase.auth().currentUser;
   if(!user){alert('Please sign in first.');return;}
   const today=new Date().toISOString().split('T')[0];
@@ -1448,7 +1515,7 @@ async function irfuImportAppointments(){
   IRFU_CATS.forEach(c=>(IRFU_STATE[c.id]||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n)));
   (IRFU_STATE.pool||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n));
   let added=0,skipped=0;
-  for(const appt of IRFU_APPOINTMENTS){
+  for(const appt of appointments){
     const name=appt.ref;
     if(!name||name==='Unknown')continue;
     const nameNorm=name.toLowerCase().trim();
