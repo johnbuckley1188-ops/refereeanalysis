@@ -959,9 +959,10 @@ function renderOV(){
   if(f.cardsOnly)filtered=filtered.filter(m=>{const hs=m.stats[m.hid]||{},as2=m.stats[m.aid]||{};return(hs.yel||0)+(hs.red||0)+(as2.yel||0)+(as2.red||0)>0;});
   if(f.redCardsOnly)filtered=filtered.filter(m=>{const hs=m.stats[m.hid]||{},as2=m.stats[m.aid]||{};return(hs.red||0)+(as2.red||0)>0;});
   const groups=new Map();
-  filtered.forEach(m=>{if(!groups.has(m.tour))groups.set(m.tour,{id:m.tour,name:m.tourN||m.tour,ms:[]});groups.get(m.tour).ms.push(m);});
+  filtered.forEach(m=>{if(!groups.has(m.tour))groups.set(m.tour,{id:m.tour,name:TID_NAMES[+m.tour]||m.tourN||m.tour,ms:[]});groups.get(m.tour).ms.push(m);});
   [...groups.values()].forEach(g=>g.ms.sort((a,b)=>dsort(a.date)-dsort(b.date)||+a.week- +b.week));
-  const sortedGroups=[...groups.values()].sort((a,b)=>a.name.localeCompare(b.name));
+  const _OV_PIN={'AIL 1A':0,'AIL 1B':1,'AIL 2A':2,'URC':3};
+  const sortedGroups=[...groups.values()].sort((a,b)=>{const pa=_OV_PIN[a.name]??99,pb=_OV_PIN[b.name]??99;return pa!==pb?pa-pb:a.name.localeCompare(b.name);});
   const filteredTeams=new Set();filtered.forEach(m=>{filteredTeams.add(m.hid);filteredTeams.add(m.aid);});
   el.innerHTML=`
     <div class="page-hdr" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
