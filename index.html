@@ -1232,6 +1232,13 @@ function irfuSave(){
   }
   try{localStorage.setItem('irfu_v2',JSON.stringify(IRFU_STATE));localStorage.setItem('irfu_profiles',JSON.stringify(IRFU_PROFILES));}catch(e){}
 }
+function irfuCleanPool(){
+  // Remove from pool anyone already assigned to a category
+  const inCat=new Set(IRFU_CATS.flatMap(c=>(IRFU_STATE[c.id]||[]).map(n=>n.toLowerCase().trim())));
+  const before=(IRFU_STATE.pool||[]).length;
+  IRFU_STATE.pool=(IRFU_STATE.pool||[]).filter(n=>!inCat.has(n.toLowerCase().trim()));
+  if(IRFU_STATE.pool.length<before)irfuSave();
+}
 async function irfuLoadSharedNotes(){
   if(IRFU_SHARED_NOTES)return;
   IRFU_SHARED_NOTES={};
@@ -1314,6 +1321,7 @@ function irfuChipHTML(name,catId){
 }
 async function renderIRFU(){
   await irfuLoad();
+  irfuCleanPool();
   const el=document.getElementById('irfu');
   const catHTML=IRFU_CATS.map(cat=>{
     const names=IRFU_STATE[cat.id]||[];
@@ -1437,7 +1445,7 @@ async function irfuImportAppointments(){
   });
   // Build normalized name map: lowercase → canonical, for everyone already on the board
   const boardNames=new Map();
-  Object.values(IRFU_STATE.cats||{}).forEach(c=>(c.names||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n)));
+  IRFU_CATS.forEach(c=>(IRFU_STATE[c.id]||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n)));
   (IRFU_STATE.pool||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n));
   let added=0,skipped=0;
   for(const appt of IRFU_APPOINTMENTS){
@@ -1642,6 +1650,24 @@ async function irfuOpenProfile(name){
       <div class="irfu-fld-wrap" id="irfu-fld-${key}">${irfuFieldHTML(key)}</div>
     </div>`;
   }
+  // Build set of Opta match identifiers so we can hide duplicate previous games
+  const optaKeys=new Set(allMs.map(m=>{
+    const ht=(m.hn||m.hid||'').toLowerCase().trim();
+    const at=(m.an||m.aid||'').toLowerCase().trim();
+    return ht&&at?`${ht} vs ${at}`:'';
+  }).filter(Boolean));
+  // Build Previous Games section — filter out imported entries already shown in Opta
+  const prof=IRFU_PROFILES[name]||{};
+  const prevOrig=prof.previous||[];
+  if(optaKeys.size){
+    prof.previous=prevOrig.filter(it=>{
+      if(!irfuIsImportedEntry(it))return true;
+      const tl=(it.text||'').toLowerCase();
+      return![...optaKeys].some(k=>tl.includes(k));
+    });
+  }
+  const previousSectionHTML=profSection('previous','Previous Games','📋');
+  if(optaKeys.size)prof.previous=prevOrig;
   // Check if user has shared notes for this referee
   let isShared=false;
   try{
@@ -1677,7 +1703,7 @@ async function irfuOpenProfile(name){
           <div class="irfu-sec-hdr">🏉 Recent Matches <span class="irfu-opta-src">from Opta</span></div>
           <div style="display:flex;flex-direction:column;gap:4px">${optaHTML}</div>
         </div>
-        ${profSection('previous','Previous Games','📋')}
+        ${previousSectionHTML}
         ${profSection('injuries','Injuries','🩹')}
         ${profSection('opportunities','Opportunities','⭐')}
         ${profSection('needs','Needs','🎯')}
