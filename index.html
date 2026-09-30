@@ -1181,10 +1181,10 @@ const IRFU_APPOINTMENTS=[
 ];
 // Priority: cycling order none→high→med→low→none
 const IRFU_PRIO={
-  '':   {lbl:'·',c:'var(--txt-faint)',bg:'transparent',bc:'var(--border)',next:'high'},
-  high: {lbl:'H',c:'#fff',bg:'#c0392b',bc:'#c0392b',next:'med'},
-  med:  {lbl:'M',c:'#fff',bg:'#d08000',bc:'#d08000',next:'low'},
-  low:  {lbl:'L',c:'#fff',bg:'#1a6b3e',bc:'#1a6b3e',next:''},
+  '':   {lbl:'Priority',c:'var(--txt-faint)',bg:'transparent',bc:'var(--border)',next:'high'},
+  high: {lbl:'High',c:'#fff',bg:'#c0392b',bc:'#c0392b',next:'med'},
+  med:  {lbl:'Med',c:'#fff',bg:'#d08000',bc:'#d08000',next:'low'},
+  low:  {lbl:'Low',c:'#fff',bg:'#1a6b3e',bc:'#1a6b3e',next:''},
 };
 let IRFU_STATE=null,IRFU_PROFILES=null,IRFU_DRAG=null,IRFU_DID_DRAG=false,IRFU_PROFILE_NAME=null;
 let IRFU_SHARED_NOTES=null,IRFU_FILTER_HAS_NOTES=false,IRFU_PROFILE_TAB='mine';
@@ -1418,26 +1418,44 @@ function irfuToggleNotesFilter(){
   IRFU_FILTER_HAS_NOTES=!IRFU_FILTER_HAS_NOTES;
   renderIRFU();
 }
+function irfuIsImportedEntry(it){
+  // Identifies entries added by the import function (format: "Comp: Home vs Away — Venue")
+  return it&&it.text&&it.text.includes(' vs ')&&(it.text.includes('—')||it.text.includes('—'));
+}
 async function irfuImportAppointments(){
   if(!IRFU_APPOINTMENTS||!IRFU_APPOINTMENTS.length){alert('No appointments data found.');return;}
   const user=firebase.auth().currentUser;
   if(!user){alert('Please sign in first.');return;}
-  // Get all referee names from the board
-  const allNames=new Set();
-  Object.values(IRFU_STATE.cats||{}).forEach(c=>(c.names||[]).forEach(n=>allNames.add(n)));
-  (IRFU_STATE.pool||[]).forEach(n=>allNames.add(n));
+  const today=new Date().toISOString().split('T')[0];
+  // First, clear any previously imported entries from all profiles so we start fresh
+  Object.keys(IRFU_PROFILES||{}).forEach(name=>{
+    const prof=IRFU_PROFILES[name];
+    if(!prof)return;
+    ['upcoming','previous'].forEach(f=>{
+      if(prof[f])prof[f]=prof[f].filter(it=>!irfuIsImportedEntry(it));
+    });
+  });
+  // Build normalized name map: lowercase → canonical, for everyone already on the board
+  const boardNames=new Map();
+  Object.values(IRFU_STATE.cats||{}).forEach(c=>(c.names||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n)));
+  (IRFU_STATE.pool||[]).forEach(n=>boardNames.set(n.toLowerCase().trim(),n));
   let added=0,skipped=0;
   for(const appt of IRFU_APPOINTMENTS){
     const name=appt.ref;
     if(!name||name==='Unknown')continue;
-    // Ensure referee exists in profiles; if not, add to pool
-    if(!allNames.has(name)){
+    const nameNorm=name.toLowerCase().trim();
+    // Only add to pool if genuinely not on the board at all
+    if(!boardNames.has(nameNorm)){
       IRFU_STATE.pool=IRFU_STATE.pool||[];
-      if(!IRFU_STATE.pool.includes(name)){
+      if(!IRFU_STATE.pool.some(n=>n.toLowerCase().trim()===nameNorm)){
         IRFU_STATE.pool.push(name);
-        allNames.add(name);
+        boardNames.set(nameNorm,name);
       }
     }
+    // Use canonical name from board
+    const canonName=boardNames.get(nameNorm)||name;
+    // Past games → previous, future games → upcoming
+    const field=appt.date<=today?'previous':'upcoming';
     // Build note text
     let roleTag=appt.role&&appt.role!=='Referee'?` (${appt.role})`:'';
     const noteText=`${appt.comp}: ${appt.home} vs ${appt.away} — ${appt.venue}${appt.time?', '+appt.time:''}${roleTag}`;
@@ -1447,11 +1465,12 @@ async function irfuImportAppointments(){
     if(comp.includes('urc')||comp.includes('a interpro')||comp.includes("women's international")||comp.includes('international')){priority='high';}
     else if(comp.includes('ail 1')||comp.includes('pre-season')){priority='med';}
     // Load existing profile
-    if(!IRFU_PROFILES[name])IRFU_PROFILES[name]={};
-    const prof=IRFU_PROFILES[name];
-    const upcoming=prof.upcoming||[];
-    // Dedup: same date and both team names appear in existing entry
-    const dup=upcoming.some(it=>{
+    if(!IRFU_PROFILES[canonName])IRFU_PROFILES[canonName]={};
+    const prof=IRFU_PROFILES[canonName];
+    const items=prof[field]||[];
+    // Dedup: check BOTH upcoming AND previous so we never double-add across fields
+    const allExisting=[...(prof.upcoming||[]),...(prof.previous||[])];
+    const dup=allExisting.some(it=>{
       if(!it.text)return false;
       const sameDate=it.date&&it.date===appt.date;
       const hasHome=it.text.toLowerCase().includes(appt.home.toLowerCase());
@@ -1461,8 +1480,8 @@ async function irfuImportAppointments(){
     if(dup){skipped++;continue;}
     // Add note
     const newItem={id:irfuItemId(),text:noteText,done:false,priority,date:appt.date};
-    upcoming.push(newItem);
-    prof.upcoming=upcoming;
+    items.push(newItem);
+    prof[field]=items;
     added++;
   }
   // Save all profiles to Firestore
@@ -1472,9 +1491,9 @@ async function irfuImportAppointments(){
     const docRef=db.collection('irfu_data').doc(user.uid);
     await docRef.set({profiles:IRFU_PROFILES},{merge:true});
     renderIRFU();
-    alert(`✅ Imported ${added} appointment${added!==1?'s':''} into upcoming games.${skipped?`\n(${skipped} already existed — skipped)`:''}`);
+    alert(`✅ Imported ${added} appointment${added!==1?'s':''} into referee profiles.\nPast games → Previous Games \xb7 Future games → Upcoming Games${skipped?`\n(${skipped} already existed — skipped)`:''}`);
   }else{
-    alert(`All ${skipped} appointment${skipped!==1?'s':''} already in upcoming games — nothing new to import.`);
+    alert(`All ${skipped} appointment${skipped!==1?'s':''} already in profiles — nothing new to import.`);
   }
 }
 function irfuMatchesRef(name,rn){
