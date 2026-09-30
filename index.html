@@ -513,7 +513,7 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
 
 <script>
 // ===== CONSTANTS =====
-const TID_NAMES={1:"Tour Match",3:"International",97:"Japan Top League",197:"Top League Cup",201:"Gallagher Premiership",202:"Heineken Cup",203:"Top 14",204:"URC",205:"Super Rugby",207:"Currie Cup",208:"Bunnings Warehouse NPC",209:"Six Nations",210:"Rugby World Cup",213:"European Challenge Cup",214:"The Rugby Championship",216:"World Rugby Under 20 Championship",217:"U20 Six Nations",218:"Nations Cup",219:"Pacific Nations Cup",221:"British & Irish Lions",238:"Tbilisi Cup",242:"Heineken Champions Cup",243:"European Rugby Challenge Cup",245:"European Rugby Champions Cup Play Off",247:"National Rugby Championship",248:"Women's Six Nations",249:"Women's Rugby World Cup",251:"Dubai 7s",252:"Cape Town 7s",254:"Sydney 7s",255:"Las Vegas 7s",256:"Vancouver 7s",258:"Singapore 7s",259:"Paris 7s",260:"London 7s",261:"Dubai Women's 7s",264:"Langford Women's 7s",266:"Americas Rugby Championship",267:"Australian Super U20",269:"Rugby Europe Championship",270:"Shute Shield",271:"Queensland Premier Rugby",272:"Pindan Premier Grade",273:"Queensland GPS",274:"Women's International",275:"Women's Rugby Super Series",276:"Oceania Rugby U20 Championship",282:"Olympic Men's 7s",283:"Olympic Women's 7s",284:"Sydney Women's 7s",285:"Kitakyushu Women's 7s",306:"Las Vegas Women's 7s",315:"Hamilton 7s",316:"Hong Kong Cup of Nations",317:"Paris Women's 7s",323:"Women's Rugby World Cup 7s",326:"Premiership Rugby Cup",327:"Colorado Womens 7s",334:"Rugby World Cup Repechage",337:"Biarritz Women's 7s",348:"Cape Town Womens 7s",351:"AIL 1A",352:"AIL 1B",355:"Super Rugby Aotearoa",356:"Super Rugby AUS",357:"Super Rugby SA",365:"Autumn Nations Cup",366:"Tri Nations",421:"Japan Rugby League One",268:"Pre Season",512:"Toyota Challenge",281:"SA Rugby U21 Cup",211:"Pro D2",359:"U20 Summer Series",820:"U20 International",830:"U18 International",331:"U19 Super Rugby",335:"U16 Super Rugby",280:"SA Rugby U19 Cup",430:"Japan University Championship",867:"IRFU U18 Schools Interpro",870:"IRFU Womens U18 Interpro",866:"IRFU Womens Interpro",869:"IRFU U19 Interpro",868:"IRFU U18 Clubs Interpro",873:"IRFU U18 International",874:"IRFU Friendlies",877:"IRFU A Games",114:"Nations Championship"};
+const TID_NAMES={1:"Tour Match",3:"International",97:"Japan Top League",197:"Top League Cup",201:"Gallagher Premiership",202:"Heineken Cup",203:"Top 14",204:"URC",205:"Super Rugby",207:"Currie Cup",208:"Bunnings Warehouse NPC",209:"Six Nations",210:"Rugby World Cup",213:"European Challenge Cup",214:"The Rugby Championship",216:"World Rugby Under 20 Championship",217:"U20 Six Nations",218:"Nations Cup",219:"Pacific Nations Cup",221:"British & Irish Lions",238:"Tbilisi Cup",242:"Heineken Champions Cup",243:"European Rugby Challenge Cup",245:"European Rugby Champions Cup Play Off",247:"National Rugby Championship",248:"Women's Six Nations",249:"Women's Rugby World Cup",251:"Dubai 7s",252:"Cape Town 7s",254:"Sydney 7s",255:"Las Vegas 7s",256:"Vancouver 7s",258:"Singapore 7s",259:"Paris 7s",260:"London 7s",261:"Dubai Women's 7s",264:"Langford Women's 7s",266:"Americas Rugby Championship",267:"Australian Super U20",269:"Rugby Europe Championship",270:"Shute Shield",271:"Queensland Premier Rugby",272:"Pindan Premier Grade",273:"Queensland GPS",274:"Women's International",275:"Women's Rugby Super Series",276:"Oceania Rugby U20 Championship",282:"Olympic Men's 7s",283:"Olympic Women's 7s",284:"Sydney Women's 7s",285:"Kitakyushu Women's 7s",306:"Las Vegas Women's 7s",315:"Hamilton 7s",316:"Hong Kong Cup of Nations",317:"Paris Women's 7s",323:"Women's Rugby World Cup 7s",326:"Premiership Rugby Cup",327:"Colorado Womens 7s",334:"Rugby World Cup Repechage",337:"Biarritz Women's 7s",348:"Cape Town Womens 7s",351:"AIL 1A",352:"AIL 1B",355:"Super Rugby Aotearoa",356:"Super Rugby AUS",357:"Super Rugby SA",365:"Autumn Nations Cup",366:"Tri Nations",421:"Japan Rugby League One",268:"Pre Season",512:"Toyota Challenge",281:"SA Rugby U21 Cup",211:"Pro D2",359:"U20 Summer Series",820:"U20 International",830:"U18 International",331:"U19 Super Rugby",335:"U16 Super Rugby",280:"SA Rugby U19 Cup",430:"Japan University Championship",867:"IRFU U18 Schools Interpro",870:"IRFU Womens U18 Interpro",866:"IRFU Womens Interpro",869:"IRFU U19 Interpro",868:"IRFU U18 Clubs Interpro",873:"IRFU U18 International",874:"IRFU Friendlies",877:"IRFU A Games",875:"AIL 2A",876:"AIL 2B",878:"AIL 2C",879:"AIL 3",880:"AIL 4",114:"Nations Championship"};
 // Infringement labels keyed by ActionType code (from Opta lookup dictionary)
 const INF_L={
   '219':'Offside','220':'Offside At Kick','257':'Acc. Offside','430':'No 9 Offside',
@@ -692,7 +692,11 @@ function renderGlobalFilters(){
   if(!MATCHES.length){el.style.display='none';return;}
   el.style.display='flex';
   const f=GLOBAL_FILTERS;
-  const allTours=tours().map(t=>({id:t.id,c:t.c,n:TID_NAMES[+t.id]||t.tourN||String(t.id)})).sort((a,b)=>a.n.localeCompare(b.n));
+  const _TOUR_PIN={'AIL 1A':0,'AIL 1B':1,'AIL 2A':2,'URC':3};
+  const allTours=tours().map(t=>({id:t.id,c:t.c,n:TID_NAMES[+t.id]||t.tourN||String(t.id)})).sort((a,b)=>{
+    const pa=_TOUR_PIN[a.n]??99,pb=_TOUR_PIN[b.n]??99;
+    return pa!==pb?pa-pb:a.n.localeCompare(b.n);
+  });
   const allTeams=Object.values(MATCHES.reduce((m,x)=>{if(x.hid)m[x.hid]={id:x.hid,n:x.hn||x.hid};if(x.aid)m[x.aid]={id:x.aid,n:x.an||x.aid};return m;},{})).filter(t=>t.id).sort((a,b)=>(a.n||'').localeCompare(b.n||''));
   const allRefs=refs().sort((a,b)=>a.n.localeCompare(b.n));
   const hasFilter=(f.tours&&f.tours.length)||(f.teams&&f.teams.length)||f.homeTeam||f.awayTeam||f.ref||f.dateFrom||f.dateTo;
@@ -1534,11 +1538,8 @@ async function irfuImportAppointments(appointments){
     // Build note text
     let roleTag=appt.role&&appt.role!=='Referee'?` (${appt.role})`:'';
     const noteText=`${appt.comp}: ${appt.home} vs ${appt.away} — ${appt.venue}${appt.time?', '+appt.time:''}${roleTag}`;
-    // Priority
-    let priority='';
-    const comp=(appt.comp||'').toLowerCase();
-    if(comp.includes('urc')||comp.includes('a interpro')||comp.includes("women's international")||comp.includes('international')){priority='high';}
-    else if(comp.includes('ail 1')||comp.includes('pre-season')){priority='med';}
+    // Priority — not auto-assigned; set manually per game if needed
+    const priority='';
     // Load existing profile
     if(!IRFU_PROFILES[canonName])IRFU_PROFILES[canonName]={};
     const prof=IRFU_PROFILES[canonName];
