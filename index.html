@@ -1650,24 +1650,28 @@ async function irfuOpenProfile(name){
       <div class="irfu-fld-wrap" id="irfu-fld-${key}">${irfuFieldHTML(key)}</div>
     </div>`;
   }
-  // Build set of Opta match identifiers so we can hide duplicate previous games
-  const optaKeys=new Set(allMs.map(m=>{
-    const ht=(m.hn||m.hid||'').toLowerCase().trim();
-    const at=(m.an||m.aid||'').toLowerCase().trim();
-    return ht&&at?`${ht} vs ${at}`:'';
-  }).filter(Boolean));
+  // Build Opta match list for deduplication (teams may differ: "Leinster Rugby" vs "Leinster")
+  const optaMatchList=allMs.map(m=>({
+    ht:(m.hn||m.hid||'').toLowerCase().trim(),
+    at:(m.an||m.aid||'').toLowerCase().trim(),
+  })).filter(x=>x.ht&&x.at);
+  function irfuTeamsOverlap(a,b){return a.includes(b)||b.includes(a);}
+  function irfuImportedMatchesOpta(it){
+    // Extract "Home vs Away" from text like "URC: Home vs Away — venue, time"
+    const mid=(it.text||'').toLowerCase().replace(/^[^:]+:\s*/,'').replace(/\s*[—–—–].*$/,'').trim();
+    const parts=mid.split(/\s+vs\s+/);
+    if(parts.length<2)return false;
+    const ih=parts[0].trim(),ia=parts[1].trim();
+    return optaMatchList.some(({ht,at})=>irfuTeamsOverlap(ih,ht)&&irfuTeamsOverlap(ia,at));
+  }
   // Build Previous Games section — filter out imported entries already shown in Opta
   const prof=IRFU_PROFILES[name]||{};
   const prevOrig=prof.previous||[];
-  if(optaKeys.size){
-    prof.previous=prevOrig.filter(it=>{
-      if(!irfuIsImportedEntry(it))return true;
-      const tl=(it.text||'').toLowerCase();
-      return![...optaKeys].some(k=>tl.includes(k));
-    });
+  if(optaMatchList.length){
+    prof.previous=prevOrig.filter(it=>!irfuIsImportedEntry(it)||!irfuImportedMatchesOpta(it));
   }
   const previousSectionHTML=profSection('previous','Previous Games','📋');
-  if(optaKeys.size)prof.previous=prevOrig;
+  if(optaMatchList.length)prof.previous=prevOrig;
   // Check if user has shared notes for this referee
   let isShared=false;
   try{
