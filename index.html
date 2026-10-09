@@ -343,6 +343,184 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
 .irfu-share-btn.share:hover{background:#156132}
 .irfu-share-btn.unshare{background:transparent;border:1px solid rgba(26,107,62,.35);color:var(--green)}
 .irfu-share-btn.unshare:hover{background:rgba(26,107,62,.12)}
+/* ==== DEPTH CHART: freshness line, risk flag, filter ==== */
+.irfu-chip{position:relative;overflow:hidden;padding-bottom:8px}
+.irfu-fresh{position:absolute;left:0;right:0;bottom:0;height:3px}
+.irfu-fresh-fresh{background:#2a8a52}
+.irfu-fresh-due{background:#e0a100}
+.irfu-fresh-stale{background:#c0392b}
+.irfu-fresh-never{background:repeating-linear-gradient(90deg,#c9d3cb 0 4px,transparent 4px 7px)}
+.irfu-risk{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);flex-shrink:0}
+.irfu-risk-amber{background:#e08a00}
+.irfu-risk-red{background:#c0392b}
+.irfu-filter-sel{font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt);cursor:pointer}
+.irfu-legend{display:flex;gap:12px;flex-wrap:wrap;align-items:center;font-size:11px;color:var(--txt-dim);margin:-4px 0 12px}
+.irfu-legend span{display:inline-flex;align-items:center;gap:5px}
+.irfu-legend i{display:inline-block;width:18px;height:3px;border-radius:2px}
+
+/* ==== REFEREE PAGE ==== */
+.irp-overlay{position:fixed;inset:0;background:rgba(10,30,18,.45);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px}
+.irp{width:min(1240px,100%);height:min(94vh,100%);background:var(--bg);border-radius:14px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:irpIn .18s ease}
+@keyframes irpIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.irp-hdr{background:#0f4a2a;color:#fff;padding:12px 52px 0 18px;flex-shrink:0;position:relative}
+.irp-hdr-top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.irp-hdr-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:24px;letter-spacing:.3px;line-height:1}
+.irp-hdr-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap;flex:1}
+.irp-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:10px;background:rgba(255,255,255,.14);color:#fff;white-space:nowrap}
+.irp-pill.amber{background:#e08a00}.irp-pill.red{background:#c0392b}.irp-pill.green{background:rgba(255,255,255,.14)}
+.irp-close{position:absolute;top:9px;right:10px;font-size:18px;color:rgba(255,255,255,.8);padding:4px 9px;border-radius:7px}
+.irp-close:hover{background:rgba(255,255,255,.12);color:#fff}
+.irp-share{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(255,255,255,.75)}
+.irp-share button{font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;background:#fff;color:#0f4a2a}
+.irp-share button.unshare{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.4)}
+.irp-tabs{display:flex;gap:2px;margin-top:10px}
+.irp-tab{padding:8px 16px;font-size:12px;font-weight:700;color:rgba(255,255,255,.65);border-radius:8px 8px 0 0}
+.irp-tab:hover{color:#fff}
+.irp-tab.on{background:var(--bg);color:#0f4a2a}
+.irp-body{flex:1;overflow-y:auto;padding:16px 18px 24px}
+.irp-grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:14px;align-items:start}
+.irp-side,.irp-main{display:flex;flex-direction:column;gap:14px;min-width:0}
+.irp-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;box-shadow:var(--shadow)}
+.irp-card-hdr{font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase;color:var(--txt-faint);display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.irp-card-hdr .sp{flex:1}
+.irp-count{font-size:10px;font-weight:700;background:var(--bg);color:var(--txt-dim);padding:1px 7px;border-radius:8px;letter-spacing:0}
+/* Bio */
+.irp-bio-top{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.irp-photo{width:92px;height:110px;border-radius:10px;background:var(--green-dim) center/cover no-repeat;flex-shrink:0;position:relative;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;color:var(--green);border:1px solid var(--border)}
+.irp-photo-btn{position:absolute;right:-6px;bottom:-6px;width:28px;height:28px;border-radius:50%;background:var(--green);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-md)}
+.irp-photo-rm{position:absolute;left:-6px;bottom:-6px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--red);font-size:13px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.irp-bio-name{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:21px;line-height:1.05}
+.irp-age{font-size:12px;color:var(--txt-dim);margin-top:4px}
+.irp-facts{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;align-items:center;font-size:12px}
+.irp-facts label{color:var(--txt-faint);font-size:11px;font-weight:600}
+.irp-in{width:100%;border:1px solid transparent;background:var(--bg);border-radius:6px;padding:5px 8px;font-size:12px;color:var(--txt);outline:none;min-width:0}
+.irp-in:hover{border-color:var(--border)}
+.irp-in:focus{border-color:var(--green);background:#fff}
+.irp-unit{display:flex;align-items:center;gap:5px}
+.irp-unit span{color:var(--txt-faint);font-size:11px}
+.irp-bronco{margin-top:12px;padding:10px;border-radius:9px;background:var(--green-dim);border:1px solid rgba(26,107,62,.18)}
+.irp-bronco-row{display:flex;gap:8px;align-items:center}
+.irp-bronco-score{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;color:var(--green);background:transparent;border:none;width:84px;outline:none;padding:0}
+.irp-bronco-age{font-size:11px;font-weight:600}
+.irp-upd{margin-top:10px;font-size:11px;color:var(--txt-faint);display:flex;align-items:center;gap:6px}
+.irp-upd i{width:8px;height:8px;border-radius:50%;display:inline-block}
+/* Load */
+.irp-load-big{display:flex;align-items:baseline;gap:8px}
+.irp-load-num{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:34px;line-height:1}
+.irp-load-lbl{font-size:12px;color:var(--txt-dim)}
+.irp-load-num.green{color:var(--green)}.irp-load-num.amber{color:#d07a00}.irp-load-num.red{color:var(--red)}
+.irp-load-banner{margin:8px 0;padding:7px 10px;border-radius:8px;font-size:12px;font-weight:600}
+.irp-load-banner.amber{background:#fff4e0;color:#9a5a00}.irp-load-banner.red{background:var(--red-dim);color:var(--red)}.irp-load-banner.green{background:var(--green-dim);color:var(--green)}
+.irp-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.irp-stat{background:var(--bg);border-radius:8px;padding:7px;text-align:center}
+.irp-stat b{display:block;font-family:'Barlow Condensed',sans-serif;font-size:19px;font-weight:800}
+.irp-stat span{font-size:10px;color:var(--txt-faint)}
+.irp-strip{display:flex;gap:3px;margin:6px 0 2px}
+.irp-strip div{flex:1;height:22px;border-radius:4px;background:var(--bg);border:1px solid var(--border-light);position:relative}
+.irp-strip div.on{background:var(--green);border-color:var(--green)}
+.irp-strip div.on.amber{background:#e08a00;border-color:#e08a00}
+.irp-strip div.on.red{background:var(--red);border-color:var(--red)}
+.irp-strip div.na{background:repeating-linear-gradient(45deg,#e7ebe8 0 3px,#fff 3px 6px)}
+.irp-strip div.now{outline:2px solid #0f4a2a;outline-offset:1px}
+.irp-strip div.fut{opacity:.55}
+.irp-strip-lbl{display:flex;justify-content:space-between;font-size:9px;color:var(--txt-faint)}
+.irp-thr{display:flex;gap:6px;align-items:center;flex-wrap:wrap;font-size:11px;color:var(--txt-dim);margin-top:8px}
+.irp-thr input{width:42px;padding:3px 5px;border:1px solid var(--border);border-radius:5px;font-size:11px;text-align:center}
+.irp-sub{font-size:10px;font-weight:800;letter-spacing:1.1px;text-transform:uppercase;color:var(--txt-faint);margin:12px 0 6px}
+/* Generic rows */
+.irp-row{display:flex;align-items:center;gap:6px;padding:5px 7px;background:var(--bg);border:1px solid var(--border-light);border-radius:8px;margin-bottom:4px}
+.irp-row:hover{border-color:var(--border)}
+.irp-row.done{opacity:.5}
+.irp-row.done .irp-txt{text-decoration:line-through}
+.irp-txt{flex:1;min-width:0;border:none;background:transparent;font-size:12px;color:var(--txt);outline:none;padding:2px}
+.irp-date{border:none;background:transparent;font-size:11px;color:var(--txt-dim);outline:none;width:112px;flex-shrink:0}
+.irp-del{font-size:16px;color:var(--txt-faint);padding:0 4px;opacity:.5;flex-shrink:0}
+.irp-del:hover{opacity:1;color:var(--red)}
+.irp-add{font-size:11px;font-weight:700;color:var(--green);padding:6px 9px;border-radius:7px;border:1px dashed rgba(26,107,62,.35);width:100%;text-align:left;margin-top:2px}
+.irp-add:hover{background:var(--green-dim);border-style:solid}
+.irp-empty{color:var(--txt-faint);font-size:12px;font-style:italic;padding:4px 2px 6px}
+/* Games */
+.irp-games{display:grid;grid-template-columns:1fr 1fr;gap:14px;align-items:start}
+.irg-row{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:5px 7px;background:var(--bg);border:1px solid var(--border-light);border-radius:8px;margin-bottom:4px}
+.irg-row.today{border-color:var(--green);background:var(--green-dim)}
+.irg-row.opta-only .irg-txt-ro{color:var(--txt-dim)}
+.irg-row .irp-date,.irg-dlabel{width:108px;flex-shrink:0}
+.irg-row .irg-role{width:66px;flex-shrink:0}
+.irg-row .irp-txt,.irg-row .irg-txt-ro{flex:1 1 100%;order:5;font-weight:500;padding:3px 2px 1px}
+.irg-row .irg-score{margin-left:auto}
+.irg-row .irp-del{margin-left:auto}
+.irg-row .irg-score+.irp-del{margin-left:0}
+.irg-dlabel{font-size:11px;color:var(--txt-dim);padding-left:2px}
+.irg-role{font-size:10px;font-weight:800;border-radius:6px;padding:3px 4px;border:none;color:#fff;text-align:center;cursor:pointer;appearance:none;-webkit-appearance:none}
+.irg-role.r-Referee{background:#1a6b3e}.irg-role.r-AR1,.irg-role.r-AR2{background:#2f5fb3}.irg-role.r-TMO{background:#7a3fb0}.irg-role.r-No4,.irg-role.r-No5{background:#6b7a70}
+.irg-txt-ro{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.irg-score{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:var(--green);white-space:nowrap}
+.irg-opta{font-size:8px;font-weight:800;letter-spacing:.6px;background:var(--green-dim);color:var(--green);padding:1px 5px;border-radius:6px;margin-left:4px;vertical-align:middle}
+.irg-more{font-size:11px;font-weight:600;color:var(--txt-dim);padding:4px 2px}
+.irg-more:hover{color:var(--green)}
+/* Development board */
+.irp-dev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.irp-devcol{background:var(--bg);border-radius:10px;padding:8px;min-height:120px;border:2px dashed transparent;transition:border-color .12s,background .12s}
+.irp-devcol.drag-over{border-color:var(--green);background:var(--green-dim)}
+.irp-devcol-hdr{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:2px 4px 8px}
+.irp-devcol-hdr i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.irp-devcard{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:6px 6px 6px 4px;margin-bottom:6px;display:flex;gap:4px;align-items:flex-start;box-shadow:var(--shadow)}
+.irp-devcard.dragging{opacity:.35}
+.irp-devgrip{cursor:grab;color:var(--txt-faint);font-size:13px;padding:3px 2px;user-select:none}
+.irp-devtxt{flex:1;min-width:0;border:none;background:transparent;font-size:12px;line-height:1.45;color:var(--txt);resize:none;outline:none;overflow:hidden;font-family:inherit;padding:2px}
+.irp-devbtns{display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.irp-devbtns button{font-size:11px;color:var(--txt-faint);width:20px;height:18px;border-radius:4px;line-height:1}
+.irp-devbtns button:hover{background:var(--green-dim);color:var(--green)}
+.irp-devbtns button.x:hover{background:var(--red-dim);color:var(--red)}
+.irp-devmeta{font-size:9px;color:var(--txt-faint);padding:0 2px}
+/* Notes */
+.irp-note{background:var(--bg);border:1px solid var(--border-light);border-radius:8px;padding:6px 8px;margin-bottom:6px}
+.irp-note-top{display:flex;align-items:center;gap:6px}
+.irp-note textarea{width:100%;border:none;background:transparent;font-size:12px;line-height:1.5;resize:none;outline:none;overflow:hidden;font-family:inherit;color:var(--txt);padding:2px 0}
+/* Calendar */
+.irc-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.irc-bar h3{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:22px;min-width:150px}
+.irc-btn{font-size:12px;font-weight:700;padding:5px 11px;border-radius:7px;background:var(--card);border:1px solid var(--border)}
+.irc-btn.on{background:var(--green);color:#fff;border-color:var(--green)}
+.irc-sum{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.irc-sum div{background:var(--card);border:1px solid var(--border);border-radius:9px;padding:7px 12px;font-size:11px;color:var(--txt-dim)}
+.irc-sum b{font-family:'Barlow Condensed',sans-serif;font-size:18px;color:var(--txt);margin-right:4px}
+.irc-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.irc-dow{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;color:var(--txt-faint);text-align:center;padding:4px 0}
+.irc-day{background:var(--card);border:1px solid var(--border-light);border-radius:8px;min-height:86px;padding:5px;display:flex;flex-direction:column;gap:3px;cursor:pointer;min-width:0}
+.irc-day.wkend{background:#f7faf7}
+.irc-day.out{opacity:.35}
+.irc-day.today{border:2px solid var(--green)}
+.irc-day.unav{background:repeating-linear-gradient(45deg,#fdecea 0 6px,#fff 6px 12px)}
+.irc-day.free-wkend{background:#f0f7ff}
+.irc-dnum{font-size:11px;font-weight:700;color:var(--txt-dim);display:flex;justify-content:space-between}
+.irc-game{font-size:10px;line-height:1.25;border-radius:5px;padding:3px 5px;color:#fff;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
+.irc-game.r-Referee{background:#1a6b3e}.irc-game.r-AR1,.irc-game.r-AR2{background:#2f5fb3}.irc-game.r-TMO{background:#7a3fb0}.irc-game.r-No4,.irc-game.r-No5{background:#6b7a70}
+.irc-unav-lbl{font-size:9px;font-weight:700;color:var(--red)}
+.irc-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--txt-dim);margin-top:10px}
+.irc-legend span{display:inline-flex;align-items:center;gap:5px}
+.irc-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.irc-season{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
+.irc-month{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px}
+.irc-month h4{font-size:12px;font-weight:800;margin-bottom:6px}
+.irc-wk{display:flex;align-items:center;gap:6px;padding:4px 0;border-top:1px solid var(--border-light);font-size:11px}
+.irc-wk:first-of-type{border-top:none}
+.irc-wk-d{width:52px;color:var(--txt-faint);flex-shrink:0}
+.irc-wk-s{width:10px;height:10px;border-radius:3px;flex-shrink:0;background:#dfe7e1}
+.irc-wk-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.irc-hint{font-size:11px;color:var(--txt-faint);margin-top:6px}
+@media(max-width:900px){
+  .irp-grid{grid-template-columns:1fr}
+  .irp-games{grid-template-columns:1fr}
+}
+@media(max-width:700px){
+  .irp-overlay{padding:0}
+  .irp{height:100%;border-radius:0}
+  .irp-dev{grid-template-columns:1fr}
+  .irp-body{padding:12px}
+  .irc-day{min-height:62px;padding:3px}
+  .irc-game{font-size:9px;padding:2px 3px;-webkit-line-clamp:2}
+}
 .irfu-filter-btn{font-size:11px;font-weight:700;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--txt-dim);cursor:pointer;transition:all .12s;display:flex;align-items:center;gap:5px}
 .irfu-filter-btn.active{background:var(--green);color:#fff;border-color:var(--green)}
 .irfu-filter-btn.active:hover{background:#156132}
@@ -1087,7 +1265,12 @@ const IRFU_DEFAULT={
 const IRFU_PROF_FIELDS=[
   {key:'upcoming',label:'Upcoming Games',icon:'📅'},
   {key:'previous',label:'Previous Games',icon:'📋'},
+  {key:'dev_current',label:'Current',icon:'▶'},
+  {key:'dev_upcoming',label:'Upcoming',icon:'⏭'},
+  {key:'dev_target',label:'Target / Goal',icon:'🎯'},
+  {key:'notes',label:'Notes',icon:'📝'},
   {key:'injuries',label:'Injuries',icon:'🩹'},
+  // legacy lists (migrated into the development board when a profile is opened)
   {key:'opportunities',label:'Opportunities',icon:'⭐'},
   {key:'needs',label:'Needs',icon:'🎯'},
   {key:'goals',label:'Goals',icon:'🏆'},
@@ -1192,7 +1375,7 @@ const IRFU_PRIO={
   low:  {lbl:'Low',c:'#fff',bg:'#1a6b3e',bc:'#1a6b3e',next:''},
 };
 let IRFU_STATE=null,IRFU_PROFILES=null,IRFU_DRAG=null,IRFU_DID_DRAG=false,IRFU_PROFILE_NAME=null;
-let IRFU_SHARED_NOTES=null,IRFU_FILTER_HAS_NOTES=false,IRFU_PROFILE_TAB='mine';
+let IRFU_SHARED_NOTES=null,IRFU_FILTER_HAS_NOTES=false,IRFU_PROFILE_TAB='mine',IRFU_FILTER='all',IRFU_SAVE_T=null;
 async function irfuLoad(){
   if(IRFU_STATE)return;
   // Load shared board (one board for all editors/admins)
@@ -1227,16 +1410,25 @@ async function irfuLoad(){
     try{const s=localStorage.getItem('irfu_profiles');if(s)IRFU_PROFILES=JSON.parse(s);}catch(e){}
   }
   if(!IRFU_PROFILES)IRFU_PROFILES={};
+  await irfuLoadBios();
 }
-function irfuSave(){
-  if(FIRESTORE&&SESSION){
+function irfuSave(touch=true){
+  // Stamp "last updated" on the referee whose page is open
+  if(touch&&IRFU_PROFILE_NAME&&IRFU_PROFILES&&IRFU_PROFILES[IRFU_PROFILE_NAME])
+    IRFU_PROFILES[IRFU_PROFILE_NAME].updatedAt=new Date().toISOString();
+  clearTimeout(IRFU_SAVE_T);IRFU_SAVE_T=setTimeout(irfuFlush,600);
+  try{localStorage.setItem('irfu_v2',JSON.stringify(IRFU_STATE));localStorage.setItem('irfu_profiles',JSON.stringify(IRFU_PROFILES));}catch(e){}
+}
+function irfuFlush(){
+  clearTimeout(IRFU_SAVE_T);IRFU_SAVE_T=null;
+  if(FIRESTORE&&SESSION&&IRFU_STATE){
     // Board is shared across all editors/admins
     FIRESTORE.doc('irfu_data/shared_board').set({state:IRFU_STATE,updatedAt:new Date().toISOString()}).catch(()=>{});
     // Profiles are private per user
-    FIRESTORE.doc(`irfu_data/${SESSION.uid}`).set({profiles:IRFU_PROFILES,updatedAt:new Date().toISOString()}).catch(()=>{});
+    FIRESTORE.doc(`irfu_data/${SESSION.uid}`).set({profiles:IRFU_PROFILES,updatedAt:new Date().toISOString()}).catch(()=>toast('Could not save notes','err'));
   }
-  try{localStorage.setItem('irfu_v2',JSON.stringify(IRFU_STATE));localStorage.setItem('irfu_profiles',JSON.stringify(IRFU_PROFILES));}catch(e){}
 }
+window.addEventListener('beforeunload',()=>{if(IRFU_SAVE_T)irfuFlush();});
 function irfuCleanPool(){
   // Remove from pool anyone already assigned to a category
   const inCat=new Set(IRFU_CATS.flatMap(c=>(IRFU_STATE[c.id]||[]).map(n=>n.toLowerCase().trim())));
@@ -1307,21 +1499,37 @@ async function irfuRenderTeamNotesPane(refName){
 function irfuItemId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
 // ---- Board chip rendering ----
 function irfuHasNotes(name){
+  const b=typeof irfuBio==='function'?irfuBio(name):{};
+  if(['dob','club','province','height','weight','bronco','photo'].some(k=>b[k]))return true;
   const prof=IRFU_PROFILES&&IRFU_PROFILES[name];
   if(!prof)return false;
   return IRFU_PROF_FIELDS.some(f=>(prof[f.key]||[]).some(i=>i.text&&i.text.trim()));
 }
+function irfuChipPasses(name){
+  switch(IRFU_FILTER){
+    case'data':return irfuHasNotes(name);
+    case'nodata':return!irfuHasNotes(name);
+    case'fresh':return irfuFresh(name).cls==='fresh';
+    case'due':return irfuFresh(name).cls==='due';
+    case'stale':return['stale','never'].includes(irfuFresh(name).cls);
+    case'risk':return irfuLoadInfo(name).flag!=='green';
+    default:return true;
+  }
+}
 function irfuChipHTML(name,catId){
   const esc=name.replace(/&/g,'&amp;').replace(/"/g,'&quot;');
   const hasNotes=irfuHasNotes(name);
-  const dimmed=IRFU_FILTER_HAS_NOTES&&!hasNotes?' irfu-dimmed':'';
+  const dimmed=!irfuChipPasses(name)?' irfu-dimmed':'';
   const notesCls=hasNotes?' has-notes':'';
-  const dotHTML=hasNotes?'<span class="irfu-notes-dot" title="Has notes"></span>':'';
+  const dotHTML=hasNotes?'<span class="irfu-notes-dot" title="Has data"></span>':'';
+  const F=irfuFresh(name),L=irfuLoadInfo(name);
+  const riskHTML=L.flag!=='green'?`<span class="irfu-risk irfu-risk-${L.flag}" title="${L.injured?'Injury recorded':L.peak+' consecutive weeks'}"></span>`:'';
   return `<div class="irfu-chip${notesCls}${dimmed}" draggable="true" data-name="${esc}" data-cat="${catId}"
     ondragstart="irfuDragStart(event)" ondragend="irfuDragEnd(event)"
-    onclick="irfuChipClick(event,this)">
-    <span class="irfu-grip">⠿</span><span class="irfu-name">${name}</span>${dotHTML}
+    onclick="irfuChipClick(event,this)" title="${F.label}">
+    <span class="irfu-grip">⠿</span><span class="irfu-name">${name}</span>${riskHTML}${dotHTML}
     <button class="irfu-x" onclick="event.stopPropagation();irfuRemoveName(this)" title="Remove">×</button>
+    <span class="irfu-fresh irfu-fresh-${F.cls}"></span>
   </div>`;
 }
 async function renderIRFU(){
@@ -1350,9 +1558,10 @@ async function renderIRFU(){
     </div>
     <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
       <button class="flt-btn" onclick="irfuReset()" style="font-size:11px;padding:5px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--txt-dim)">↺ Reset to 2026-27 Panel</button>
-      <button id="irfu-notes-filter-btn" class="irfu-filter-btn${IRFU_FILTER_HAS_NOTES?' active':''}" onclick="irfuToggleNotesFilter()">
-        <span>📝</span> Has Notes${IRFU_FILTER_HAS_NOTES?' ✓':''}
-      </button>
+      <select class="irfu-filter-sel" onchange="IRFU_FILTER=this.value;renderIRFU()" title="Filter referees">
+        ${[['all','Show all referees'],['data','Has data'],['nodata','No data yet'],['fresh','Updated in last 7 days'],['due','Due a check-in (8–14 days)'],['stale','Overdue (14+ days / never)'],['risk','Load or injury flag']]
+          .map(([v,l])=>`<option value="${v}"${IRFU_FILTER===v?' selected':''}>${l}</option>`).join('')}
+      </select>
       <button class="irfu-filter-btn" onclick="document.getElementById('irfu-csv-input').click()" style="gap:5px" title="Upload a CSV of appointments">
         <span>📋</span> Upload Appointments
       </button>
@@ -1360,6 +1569,14 @@ async function renderIRFU(){
       <button class="irfu-filter-btn" onclick="irfuDownloadCSVTemplate()" style="gap:5px;opacity:0.7" title="Download blank CSV template">
         <span>⬇️</span> CSV Template
       </button>
+    </div>
+    <div class="irfu-legend">
+      <span><i style="background:#2a8a52"></i>Updated ≤ 7 days</span>
+      <span><i style="background:#e0a100"></i>8–14 days</span>
+      <span><i style="background:#c0392b"></i>14+ days</span>
+      <span><i style="background:repeating-linear-gradient(90deg,#c9d3cb 0 4px,transparent 4px 7px)"></i>Never</span>
+      <span><span class="irfu-notes-dot"></span>Has data</span>
+      <span><span class="irfu-risk irfu-risk-amber"></span><span class="irfu-risk irfu-risk-red"></span>Load / injury flag</span>
     </div>
     <div class="irfu-board">${catHTML}</div>
     <div class="irfu-pool-section">
@@ -1428,8 +1645,10 @@ function irfuAddName(){
 }
 function irfuReset(){
   if(!confirm('Reset to the 2026-27 National Referee Panel? Any custom changes will be lost.'))return;
+  const loadCfg=IRFU_STATE&&IRFU_STATE.loadCfg;
   IRFU_STATE=JSON.parse(JSON.stringify(IRFU_DEFAULT));
-  irfuSave();renderIRFU();
+  if(loadCfg)IRFU_STATE.loadCfg=loadCfg;
+  irfuSave(false);renderIRFU();
 }
 function irfuToggleNotesFilter(){
   IRFU_FILTER_HAS_NOTES=!IRFU_FILTER_HAS_NOTES;
@@ -1613,18 +1832,21 @@ function irfuFieldHTML(fieldKey){
     +`<button class="irfu-note-add" onclick="irfuAddItem('${fieldKey}')">+ Add</button>`;
 }
 function irfuReRenderField(fieldKey){
-  const el=document.getElementById('irfu-fld-'+fieldKey);
-  if(el)el.innerHTML=irfuFieldHTML(fieldKey);
+  if(fieldKey==='upcoming'||fieldKey==='previous')irfuRenderGames();
+  else if(fieldKey.startsWith('dev_'))irfuRenderDev();
+  else if(fieldKey==='notes')irfuRenderNotes();
+  else if(fieldKey==='injuries'){irfuRenderLoad();irfuRenderHeader();}
+  irfuAfterChange();
 }
 function irfuAddItem(fieldKey){
   const name=IRFU_PROFILE_NAME;if(!name)return;
   if(!IRFU_PROFILES[name])IRFU_PROFILES[name]={};
   if(!Array.isArray(IRFU_PROFILES[name][fieldKey]))IRFU_PROFILES[name][fieldKey]=[];
-  IRFU_PROFILES[name][fieldKey].push({id:irfuItemId(),text:'',priority:'',date:'',done:false});
+  IRFU_PROFILES[name][fieldKey].push({id:irfuItemId(),text:'',priority:'',date:fieldKey==='injuries'?irfuToday():'',done:false});
   irfuSave();irfuReRenderField(fieldKey);
   setTimeout(()=>{
-    const el=document.getElementById('irfu-fld-'+fieldKey);
-    if(el){const ins=el.querySelectorAll('.irfu-note-text');if(ins.length)ins[ins.length-1].focus();}
+    const box=fieldKey==='injuries'?document.getElementById('irp-load'):null;
+    if(box){const ins=box.querySelectorAll('.irp-txt');if(ins.length)ins[ins.length-1].focus();}
   },30);
 }
 function irfuDeleteItem(fieldKey,itemId){
@@ -1650,156 +1872,552 @@ function irfuUpdateItem(fieldKey,itemId,prop,value){
   const item=((IRFU_PROFILES[name]||{})[fieldKey]||[]).find(i=>i.id===itemId);
   if(item)item[prop]=value;
   irfuSave();
-  irfuRefreshChipDot(name);
+  irfuAfterChange();
 }
 function irfuRefreshChipDot(name){
-  // Update all chips for this name without full re-render
-  document.querySelectorAll(`.irfu-chip[data-name="${name}"]`).forEach(chip=>{
-    const has=irfuHasNotes(name);
-    chip.classList.toggle('has-notes',has);
-    if(IRFU_FILTER_HAS_NOTES)chip.classList.toggle('irfu-dimmed',!has);
-    let dot=chip.querySelector('.irfu-notes-dot');
-    if(has&&!dot){
-      const btn=chip.querySelector('.irfu-x');
-      dot=document.createElement('span');dot.className='irfu-notes-dot';dot.title='Has notes';
-      chip.insertBefore(dot,btn);
-    }else if(!has&&dot){dot.remove();}
+  // Re-render every chip for this referee in place (dot, freshness line, risk flag)
+  document.querySelectorAll('.irfu-chip').forEach(chip=>{
+    if(chip.dataset.name!==name)return;
+    const tmp=document.createElement('div');
+    tmp.innerHTML=irfuChipHTML(name,chip.dataset.cat).trim();
+    chip.replaceWith(tmp.firstElementChild);
   });
 }
+
+// ===================== REFEREE PAGE =====================
+const IRFU_ROLES=['Referee','AR1','AR2','TMO','No.4','No.5'];
+const IRFU_DEV_COLS=[
+  {key:'dev_current',label:'Current',color:'#1a6b3e'},
+  {key:'dev_upcoming',label:'Upcoming',color:'#2f5fb3'},
+  {key:'dev_target',label:'Target / Goal',color:'#d08000'},
+];
+const IRFU_PROVINCES=['','Connacht','Leinster','Munster','Ulster','Other'];
+let IRFU_BIOS=null,IRFU_BIO_T={},IRFU_PAGE_TAB='overview',IRFU_SHOW_ALL_PREV=false;
+let IRFU_CAL_MONTH=null,IRFU_CAL_VIEW='month',IRFU_DEV_DRAG=null;
+
+// ---- small helpers ----
+function irfuEsc(s){return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function irfuJsArg(s){return irfuEsc(String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'"));}
+function irfuISO(d){return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;}
+function irfuToday(){return irfuISO(new Date());}
+function irfuParseISO(s){const p=(s||'').split('-');return p.length===3?new Date(+p[0],+p[1]-1,+p[2]):null;}
+function irfuAddDays(iso,n){const d=irfuParseISO(iso);d.setDate(d.getDate()+n);return irfuISO(d);}
+function irfuWeekKey(iso){const d=irfuParseISO(iso);if(!d)return'';d.setDate(d.getDate()-((d.getDay()+6)%7));return irfuISO(d);}
+function irfuDaysAgo(ts){if(!ts)return null;return Math.floor((Date.now()-new Date(ts).getTime())/864e5);}
+function irfuFmtDate(iso,opts){const d=irfuParseISO(iso);return d?d.toLocaleDateString('en-IE',opts||{weekday:'short',day:'numeric',month:'short'}):'No date';}
+function irfuAgoText(days){if(days===null)return'never';if(days<=0)return'today';if(days===1)return'yesterday';if(days<14)return`${days} days ago`;if(days<60)return`${Math.floor(days/7)} weeks ago`;return`${Math.floor(days/30)} months ago`;}
+function irfuRoleCls(r){return'r-'+(r||'Referee').replace(/[^A-Za-z0-9]/g,'');}
+function irfuNormRole(r){
+  const s=(r||'').toLowerCase().replace(/\s+/g,'');
+  if(!s||s==='referee'||s==='ref')return'Referee';
+  if(s==='ar1')return'AR1';if(s==='ar2'||s==='ar')return s==='ar'?'AR1':'AR2';
+  if(s==='tmo')return'TMO';
+  if(s.includes('4'))return'No.4';if(s.includes('5'))return'No.5';
+  return'Referee';
+}
+function irfuCanEdit(){return SESSION&&(SESSION.type==='admin'||SESSION.type==='editor');}
+function irfuProf(name){
+  if(!IRFU_PROFILES[name])IRFU_PROFILES[name]={};
+  const p=IRFU_PROFILES[name];
+  IRFU_PROF_FIELDS.forEach(f=>{if(!Array.isArray(p[f.key]))p[f.key]=[];});
+  if(!Array.isArray(p.unavail))p.unavail=[];
+  return p;
+}
+
+// ---- Shared bio (photo, DOB, height, weight, club, province, Bronco) ----
+function irfuBioKey(name){return name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'');}
+async function irfuLoadBios(force){
+  if(IRFU_BIOS&&!force)return;
+  IRFU_BIOS={};
+  try{const s=await FIRESTORE.collection('irfu_bio').get();s.forEach(d=>{IRFU_BIOS[d.id]=d.data();});}catch(e){}
+}
+function irfuBio(name){return(IRFU_BIOS||{})[irfuBioKey(name)]||{};}
+function irfuSetBio(name,field,value){
+  const k=irfuBioKey(name);
+  if(!IRFU_BIOS)IRFU_BIOS={};
+  IRFU_BIOS[k]={...(IRFU_BIOS[k]||{}),name,[field]:value,updatedAt:new Date().toISOString(),updatedBy:SESSION?.name||''};
+  clearTimeout(IRFU_BIO_T[k]);
+  IRFU_BIO_T[k]=setTimeout(()=>{
+    FIRESTORE.doc(`irfu_bio/${k}`).set(IRFU_BIOS[k],{merge:true})
+      .catch(()=>toast('Profile not saved — Firestore rules need to allow writes to irfu_bio','err'));
+  },500);
+  irfuRefreshChipDot(name);
+}
+function irfuAge(dob){
+  const d=irfuParseISO(dob);if(!d)return null;
+  const n=new Date();let a=n.getFullYear()-d.getFullYear();
+  if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate()))a--;
+  return a;
+}
+
+// ---- Freshness (when this referee was last updated) ----
+function irfuLastUpdated(name){
+  const p=(IRFU_PROFILES||{})[name]||{},b=irfuBio(name);
+  return[p.updatedAt,b.updatedAt].filter(Boolean).sort().pop()||null;
+}
+function irfuFresh(name){
+  const ts=irfuLastUpdated(name),days=irfuDaysAgo(ts);
+  if(days===null)return{cls:'never',days,label:'Never updated'};
+  return{cls:days<=7?'fresh':days<=14?'due':'stale',days,label:'Updated '+irfuAgoText(days)};
+}
+
+// ---- Games: one Upcoming list, one Previous list (manual/imported + Opta, de-duplicated) ----
+function irfuSplitRole(it){
+  let text=it.text||'',role=it.role||'';
+  const m=text.match(/\s*\((Referee|AR\s?1|AR\s?2|AR|TMO|No\.?\s?4|No\.?\s?5)\)\s*$/i);
+  if(m){text=text.slice(0,m.index);if(!role)role=irfuNormRole(m[1]);}
+  return{role:role||'Referee',text};
+}
+function irfuOptaFor(name){
+  const all=(typeof MATCHES!=='undefined'&&MATCHES)||[];
+  let ms=all.filter(m=>m.rn&&irfuMatchesRef(name,m.rn));
+  if(!ms.length&&typeof refs==='function'){
+    const r=refs().find(r=>irfuMatchesRef(name,r.n));
+    if(r)ms=all.filter(m=>m.rid===r.id);
+  }
+  return ms.map(m=>({iso:ddmmToISO(m.date),home:m.hn||m.hid||'',away:m.an||m.aid||'',hs:m.hs,as:m.as}))
+    .filter(x=>x.iso).sort((a,b)=>b.iso.localeCompare(a.iso));
+}
+function irfuTeamsFromText(text){
+  const mid=(text||'').toLowerCase().replace(/^[^:]+:\s*/,'').replace(/\s*[—–].*$/,'').trim();
+  const parts=mid.split(/\s+vs?\.?\s+/);
+  return parts.length>=2?{h:parts[0].trim(),a:parts[1].trim()}:null;
+}
+function irfuOverlap(a,b){a=(a||'').toLowerCase();b=(b||'').toLowerCase();return!!a&&!!b&&(a.includes(b)||b.includes(a));}
+function irfuGames(name){
+  const prof=(IRFU_PROFILES||{})[name]||{};
+  const opta=irfuOptaFor(name),used=new Set(),rows=[];
+  ['upcoming','previous'].forEach(src=>(prof[src]||[]).forEach(it=>{
+    // one-off tidy: pull "(AR1)" etc. out of the text into a proper role field
+    if(!it.role){const sr=irfuSplitRole(it);if(sr.text!==(it.text||'')){it.role=sr.role;it.text=sr.text;}}
+    const{role,text}=irfuSplitRole(it);
+    const t=irfuTeamsFromText(text);
+    let o=null;
+    opta.forEach((x,i)=>{
+      if(o||used.has(i))return;
+      const teams=t&&irfuOverlap(t.h,x.home)&&irfuOverlap(t.a,x.away);
+      const near=it.date&&Math.abs((irfuParseISO(it.date)-irfuParseISO(x.iso))/864e5)<=3;
+      if((it.date===x.iso&&(!t||teams))||(teams&&near)){o=x;used.add(i);}
+    });
+    rows.push({kind:'item',src,it,role,text,date:it.date||'',opta:o});
+  }));
+  opta.forEach((x,i)=>{if(!used.has(i))rows.push({kind:'opta',role:'Referee',text:`${x.home} vs ${x.away}`,date:x.iso,opta:x});});
+  const today=irfuToday();
+  const upcoming=rows.filter(r=>r.date?r.date>=today:r.src==='upcoming').sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'));
+  const previous=rows.filter(r=>r.date?r.date<today:r.src==='previous').sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  return{upcoming,previous,all:rows};
+}
+
+// ---- Load / injury risk ----
+function irfuLoadCfg(){return Object.assign({amber:5,red:6},(IRFU_STATE&&IRFU_STATE.loadCfg)||{});}
+function irfuLoadInfo(name){
+  const cfg=irfuLoadCfg(),g=irfuGames(name),today=irfuToday(),thisWk=irfuWeekKey(today);
+  const prof=(IRFU_PROFILES||{})[name]||{};
+  const weeks=new Map();
+  g.all.forEach(r=>{if(r.date){const k=irfuWeekKey(r.date);if(!weeks.has(k))weeks.set(k,[]);weeks.get(k).push(r);}});
+  // Consecutive weeks with a game, up to and including this week
+  let cur=0,k=weeks.has(thisWk)?thisWk:irfuAddDays(thisWk,-7);
+  while(weeks.has(k)){cur++;k=irfuAddDays(k,-7);}
+  // Projected run including games already scheduled ahead
+  let proj=cur;
+  if(weeks.has(thisWk)){k=irfuAddDays(thisWk,7);while(weeks.has(k)){proj++;k=irfuAddDays(k,7);}}
+  else{let f=0;k=irfuAddDays(thisWk,7);while(weeks.has(k)){f++;k=irfuAddDays(k,7);}proj=Math.max(cur,f);}
+  const peak=Math.max(cur,proj);
+  const lvl=n=>n>=cfg.red?'red':n>=cfg.amber?'amber':'green';
+  const level=lvl(peak);
+  const from28=irfuAddDays(today,-27),to28=irfuAddDays(today,28);
+  const last28=g.all.filter(r=>r.date&&r.date>=from28&&r.date<=today).length;
+  const next28=g.all.filter(r=>r.date&&r.date>today&&r.date<=to28).length;
+  let nextFree=null;
+  for(let i=0;i<20;i++){const wk=irfuAddDays(thisWk,i*7);if(!weeks.has(wk)){nextFree=wk;break;}}
+  const injured=(prof.injuries||[]).some(i=>!i.done&&(i.text||'').trim());
+  const flag=injured?'red':level;
+  // Week strip: 8 weeks back, 5 ahead; colour each run by its length so far
+  const strip=[];
+  for(let i=-8;i<=5;i++){
+    const wk=irfuAddDays(thisWk,i*7);
+    let run=0,j=wk;while(weeks.has(j)){run++;j=irfuAddDays(j,-7);}
+    const un=(prof.unavail||[]).some(d=>irfuWeekKey(d)===wk);
+    strip.push({wk,on:weeks.has(wk),lvl:lvl(run),now:i===0,fut:i>0,un,games:weeks.get(wk)||[]});
+  }
+  return{cfg,cur,proj,peak,level,flag,injured,last28,next28,nextFree,strip,weeks,games:g};
+}
+
+// ---- Page open/close ----
 async function irfuOpenProfile(name){
   await irfuLoad();
-  IRFU_PROFILE_NAME=name;
-  if(!IRFU_PROFILES[name])IRFU_PROFILES[name]={};
-  // Migrate any old string values to arrays
-  IRFU_PROF_FIELDS.forEach(f=>{if(!Array.isArray(IRFU_PROFILES[name][f.key]))IRFU_PROFILES[name][f.key]=[];});
-  const cat=IRFU_CATS.find(c=>(IRFU_STATE[c.id]||[]).includes(name));
-  const badgeHTML=cat
-    ?`<span class="irfu-cat-badge" style="background:${cat.color}22;color:${cat.color};border:1px solid ${cat.color}44">${cat.label}</span>`
-    :`<span class="irfu-cat-badge" style="background:var(--bg);color:var(--txt-faint);border:1px solid var(--border)">Unassigned</span>`;
-  // Opta matches — try by name match first, then by rid
-  const allMsRaw=(typeof MATCHES!=='undefined'?MATCHES:[])||[];
-  const allRefNames=[...new Set(allMsRaw.filter(m=>m.rn&&m.rn!=='Unknown').map(m=>m.rn))].sort();
-  let allMs=allMsRaw
-    .filter(m=>m.rn&&irfuMatchesRef(name,m.rn))
-    .sort((a,b)=>{const da=typeof ddmmToISO==='function'?ddmmToISO(a.date):a.date,db=typeof ddmmToISO==='function'?ddmmToISO(b.date):b.date;return(db||'').localeCompare(da||'');})
-    .slice(0,8);
-  // Also try matching by rid
-  const refsList=typeof refs==='function'?refs():[];
-  if(!allMs.length){
-    const matchedRef=refsList.find(r=>irfuMatchesRef(name,r.n));
-    if(matchedRef){
-      allMs=allMsRaw.filter(m=>m.rid===matchedRef.id)
-        .sort((a,b)=>{const da=typeof ddmmToISO==='function'?ddmmToISO(a.date):a.date,db=typeof ddmmToISO==='function'?ddmmToISO(b.date):b.date;return(db||'').localeCompare(da||'');})
-        .slice(0,8);
-    }
+  await irfuLoadBios();
+  IRFU_PROFILE_NAME=name;IRFU_SHOW_ALL_PREV=false;IRFU_CAL_MONTH=irfuToday().slice(0,7);
+  const prof=irfuProf(name);
+  // One-off migration of the old Needs / Opportunities / Goals lists into the new board
+  if(!prof._devMigrated){
+    const mv=(from,to)=>{if((prof[from]||[]).length){prof[to]=[...(prof[to]||[]),...prof[from].filter(i=>(i.text||'').trim())];prof[from]=[];}};
+    mv('needs','dev_current');mv('opportunities','dev_upcoming');mv('goals','dev_target');
+    prof._devMigrated=true;irfuSave(false);
   }
-  const nameLast=name.toLowerCase().split(/\s+/).pop();
-  const datasetNames=allRefNames.filter(n=>n.toLowerCase().includes(nameLast));
-  const optaHTML=allMs.length
-    ?allMs.map(m=>{
-        const ht=m.hn||m.hid||'';
-        const at=m.an||m.aid||'';
-        return `<div class="irfu-opta-row">
-          <span class="irfu-opta-date">${m.date||''}</span>
-          <span class="irfu-opta-teams">${ht} <span style="color:var(--txt-faint)">vs</span> ${at}</span>
-          <span class="irfu-opta-score">${m.hs??''}–${m.as??''}</span>
-        </div>`;
-      }).join('')
-    :`<div class="irfu-empty-note" style="line-height:1.7">
-        No matches found for <strong>${name}</strong>.<br>
-        <span style="font-size:10px;color:var(--txt-faint)">${allMsRaw.length} matches loaded · ${allRefNames.length} referees in dataset</span><br>
-        ${datasetNames.length
-          ?`<span style="font-size:10px">Dataset has: <strong>${datasetNames.join(', ')}</strong></span>`
-          :`<span style="font-size:10px;color:var(--txt-faint)">No referee with surname "<em>${nameLast}</em>" found in dataset.<br>
-            All referees: ${allRefNames.slice(0,20).join(', ')}${allRefNames.length>20?'…':''}</span>`}
-      </div>`;
-  function profSection(key,label,icon){
-    return `<div class="irfu-section">
-      <div class="irfu-sec-hdr">${icon} ${label}</div>
-      <div class="irfu-fld-wrap" id="irfu-fld-${key}">${irfuFieldHTML(key)}</div>
-    </div>`;
-  }
-  // Build Opta match list for deduplication (teams may differ: "Leinster Rugby" vs "Leinster")
-  const optaMatchList=allMs.map(m=>({
-    ht:(m.hn||m.hid||'').toLowerCase().trim(),
-    at:(m.an||m.aid||'').toLowerCase().trim(),
-  })).filter(x=>x.ht&&x.at);
-  function irfuTeamsOverlap(a,b){return a.includes(b)||b.includes(a);}
-  function irfuImportedMatchesOpta(it){
-    // Extract "Home vs Away" from text like "URC: Home vs Away — venue, time"
-    const mid=(it.text||'').toLowerCase().replace(/^[^:]+:\s*/,'').replace(/\s*[—–—–].*$/,'').trim();
-    const parts=mid.split(/\s+vs\s+/);
-    if(parts.length<2)return false;
-    const ih=parts[0].trim(),ia=parts[1].trim();
-    return optaMatchList.some(({ht,at})=>irfuTeamsOverlap(ih,ht)&&irfuTeamsOverlap(ia,at));
-  }
-  // Build Previous Games section — filter out imported entries already shown in Opta
-  const prof=IRFU_PROFILES[name]||{};
-  const prevOrig=prof.previous||[];
-  if(optaMatchList.length){
-    prof.previous=prevOrig.filter(it=>!irfuIsImportedEntry(it)||!irfuImportedMatchesOpta(it));
-  }
-  const previousSectionHTML=profSection('previous','Previous Games','📋');
-  if(optaMatchList.length)prof.previous=prevOrig;
-  // Check if user has shared notes for this referee
-  let isShared=false;
-  try{
-    if(FIRESTORE&&SESSION){
-      const sharedDoc=await FIRESTORE.doc(`irfu_shared/${SESSION.uid}`).get();
-      isShared=sharedDoc.exists&&!!(sharedDoc.data()?.profiles?.[name]);
-    }
-  }catch(e){}
-  const hasNotes=irfuHasNotes(name);
-  const shareBarHTML=`<div class="irfu-share-bar">
-    <span class="irfu-share-status">${isShared?'✓ Notes shared with team':'Notes are private'}</span>
-    ${hasNotes
-      ?`<button class="irfu-share-btn ${isShared?'unshare':'share'}" onclick="${isShared?`irfuUnshareProfile('${name.replace(/'/g,"\\'")}')` : `irfuShareProfile('${name.replace(/'/g,"\\'")}')` }">${isShared?'Unshare':'Share with team'}</button>`
-      :'<span style="font-size:11px;color:var(--txt-faint)">Add notes to share</span>'
-    }
-  </div>`;
   const ex=document.getElementById('irfu-overlay');if(ex)ex.remove();
-  const ov=document.createElement('div');ov.id='irfu-overlay';ov.className='irfu-overlay';
-  ov.innerHTML=`<div class="irfu-panel" onclick="event.stopPropagation()">
-    <div class="irfu-panel-hdr">
-      <div><div class="irfu-panel-name">${name}</div><div style="margin-top:5px">${badgeHTML}</div></div>
-      <button class="irfu-panel-close" onclick="irfuCloseProfile()">✕</button>
-    </div>
-    <div class="irfu-ptabs">
-      <button class="irfu-ptab irfu-ptab-on" data-tab="mine" onclick="irfuSwitchProfileTab('mine')">My Notes</button>
-      <button class="irfu-ptab" data-tab="team" onclick="irfuSwitchProfileTab('team')">Team Notes</button>
-    </div>
-    <div class="irfu-ptab-body" data-tab="mine">
-      ${shareBarHTML}
-      <div class="irfu-panel-body">
-        ${profSection('upcoming','Upcoming Games','📅')}
-        <div class="irfu-section">
-          <div class="irfu-sec-hdr">🏉 Recent Matches <span class="irfu-opta-src">from Opta</span></div>
-          <div style="display:flex;flex-direction:column;gap:4px">${optaHTML}</div>
+  const ov=document.createElement('div');ov.id='irfu-overlay';ov.className='irp-overlay';
+  ov.innerHTML=`<div class="irp" onclick="event.stopPropagation()">
+    <div class="irp-hdr" id="irp-hdr"></div>
+    <div class="irp-body" data-tab="overview">
+      <div class="irp-grid">
+        <aside class="irp-side">
+          <div class="irp-card" id="irp-bio"></div>
+          <div class="irp-card" id="irp-load"></div>
+        </aside>
+        <div class="irp-main">
+          <div class="irp-games" id="irp-games"></div>
+          <div class="irp-card">
+            <div class="irp-card-hdr">🎯 Development <span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Drag cards, or use ‹ › to move between columns</span></div>
+            <div class="irp-dev" id="irp-dev"></div>
+          </div>
+          <div class="irp-card" id="irp-notes"></div>
         </div>
-        ${previousSectionHTML}
-        ${profSection('injuries','Injuries','🩹')}
-        ${profSection('opportunities','Opportunities','⭐')}
-        ${profSection('needs','Needs','🎯')}
-        ${profSection('goals','Goals','🏆')}
       </div>
     </div>
-    <div class="irfu-ptab-body" data-tab="team" style="display:none;flex:1;overflow-y:auto;padding:14px 18px">
-      <div id="irfu-team-pane"><div style="color:var(--txt-faint);font-size:12px;padding:8px 0">Loading team notes…</div></div>
-    </div>
+    <div class="irp-body" data-tab="calendar" style="display:none"><div id="irfu-cal"></div></div>
+    <div class="irp-body" data-tab="team" style="display:none"><div class="irp-card"><div id="irfu-team-pane"><div class="irp-empty">Loading team notes…</div></div></div></div>
   </div>`;
   ov.onclick=()=>irfuCloseProfile();
   document.body.appendChild(ov);
-  // Render team notes pane on tab switch
-  document.querySelectorAll('.irfu-ptab').forEach(btn=>{
-    btn.onclick=()=>{
-      irfuSwitchProfileTab(btn.dataset.tab);
-      if(btn.dataset.tab==='team')irfuRenderTeamNotesPane(name);
-    };
-  });
+  await irfuRenderHeader();
+  irfuRenderBio();irfuRenderLoad();irfuRenderGames();irfuRenderDev();irfuRenderNotes();
+  irfuSwitchPageTab(IRFU_PAGE_TAB);
 }
 function irfuCloseProfile(){
   const o=document.getElementById('irfu-overlay');if(o)o.remove();
+  irfuFlush();
   IRFU_PROFILE_NAME=null;
+}
+function irfuSwitchPageTab(tab){
+  IRFU_PAGE_TAB=tab;
+  document.querySelectorAll('.irp-tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
+  document.querySelectorAll('.irp-body').forEach(d=>{d.style.display=d.dataset.tab===tab?'':'none';});
+  if(tab==='calendar')irfuRenderCalendar();
+  if(tab==='team')irfuRenderTeamNotesPane(IRFU_PROFILE_NAME);
+}
+async function irfuRenderHeader(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-hdr');if(!el)return;
+  const cat=IRFU_CATS.find(c=>(IRFU_STATE[c.id]||[]).includes(name));
+  const L=irfuLoadInfo(name),F=irfuFresh(name);
+  let isShared=false;
+  try{if(FIRESTORE&&SESSION){const d=await FIRESTORE.doc(`irfu_shared/${SESSION.uid}`).get();isShared=d.exists&&!!(d.data()?.profiles?.[name]);}}catch(e){}
+  const loadTxt=L.injured?'Injury flagged':L.level==='green'?`Load OK · ${L.peak} wk run`:`${L.level==='red'?'High':'Elevated'} load · ${L.peak} wks in a row`;
+  el.innerHTML=`<div class="irp-hdr-top">
+      <div class="irp-hdr-name">${irfuEsc(name)}</div>
+      <div class="irp-hdr-meta">
+        <span class="irp-pill">${cat?irfuEsc(cat.label):'Unassigned'}</span>
+        <span class="irp-pill ${L.flag}">${loadTxt}</span>
+        <span class="irp-pill">${F.label}</span>
+      </div>
+      <div class="irp-share">${isShared?'✓ Shared with team':'Private notes'}
+        <button class="${isShared?'unshare':''}" onclick="${isShared?`irfuUnshareProfile('${irfuJsArg(name)}')`:`irfuShareProfile('${irfuJsArg(name)}')`}">${isShared?'Unshare':'Share'}</button></div>
+      <button class="irp-close" onclick="irfuCloseProfile()">✕</button>
+    </div>
+    <div class="irp-tabs">
+      <button class="irp-tab" data-tab="overview" onclick="irfuSwitchPageTab('overview')">Overview</button>
+      <button class="irp-tab" data-tab="calendar" onclick="irfuSwitchPageTab('calendar')">📅 Calendar</button>
+      <button class="irp-tab" data-tab="team" onclick="irfuSwitchPageTab('team')">Team Notes</button>
+    </div>`;
+  document.querySelectorAll('.irp-tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===IRFU_PAGE_TAB));
+}
+// Called after any profile change so header pills / load card / chips stay current
+function irfuAfterChange(){
+  const name=IRFU_PROFILE_NAME;if(!name)return;
+  irfuRefreshChipDot(name);
+  const pill=document.querySelectorAll('#irp-hdr .irp-pill');
+  if(pill.length>=3){const F=irfuFresh(name);pill[2].textContent=F.label;}
+}
+
+// ---- Profile card ----
+function irfuRenderBio(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-bio');if(!el)return;
+  const b=irfuBio(name),age=irfuAge(b.dob),ed=irfuCanEdit()?'':'disabled';
+  const initials=name.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const bDays=b.broncoDate?irfuDaysAgo(irfuParseISO(b.broncoDate)):null;
+  const bCol=bDays===null?'var(--txt-faint)':bDays<=56?'var(--green)':bDays<=90?'#b06a00':'var(--red)';
+  const F=irfuFresh(name);
+  const fCol={fresh:'#2a8a52',due:'#e0a100',stale:'#c0392b',never:'#c9d3cb'}[F.cls];
+  const inp=(f,type,ph,extra='')=>`<input class="irp-in" type="${type}" ${ed} value="${irfuEsc(b[f]||'')}" placeholder="${ph}" ${extra}
+    onchange="irfuSetBio(IRFU_PROFILE_NAME,'${f}',this.value);${f==='dob'?'irfuRenderBio()':''}">`;
+  el.innerHTML=`<div class="irp-bio-top">
+      <div class="irp-photo" style="${b.photo?`background-image:url('${b.photo}');color:transparent`:''}">${initials}
+        ${irfuCanEdit()?`<label class="irp-photo-btn" title="Upload photo">📷<input type="file" accept="image/*" style="display:none" onchange="irfuUploadPhoto(this)"></label>`:''}
+        ${b.photo&&irfuCanEdit()?`<button class="irp-photo-rm" title="Remove photo" onclick="if(confirm('Remove photo?')){irfuSetBio(IRFU_PROFILE_NAME,'photo','');irfuRenderBio()}">×</button>`:''}
+      </div>
+      <div style="min-width:0">
+        <div class="irp-bio-name">${irfuEsc(name)}</div>
+        <div class="irp-age">${age!==null?`<b style="color:var(--txt)">${age}</b> years old`:'Age —'}</div>
+        <div class="irp-age">${irfuEsc([b.club,b.province].filter(Boolean).join(' · '))||'&nbsp;'}</div>
+      </div>
+    </div>
+    <div class="irp-facts">
+      <label>Date of birth</label>${inp('dob','date','')}
+      <label>Height</label><div class="irp-unit">${inp('height','number','—','min="140" max="220" step="1"')}<span>cm</span></div>
+      <label>Weight</label><div class="irp-unit">${inp('weight','number','—','min="40" max="160" step="0.1"')}<span>kg</span></div>
+      <label>Club</label>${inp('club','text','Club')}
+      <label>Province</label><select class="irp-in" ${ed} onchange="irfuSetBio(IRFU_PROFILE_NAME,'province',this.value);irfuRenderBio()">
+        ${IRFU_PROVINCES.map(p=>`<option value="${p}"${(b.province||'')===p?' selected':''}>${p||'—'}</option>`).join('')}</select>
+    </div>
+    <div class="irp-bronco">
+      <div class="irp-card-hdr" style="margin-bottom:4px">🏃 Bronco</div>
+      <div class="irp-bronco-row">
+        <input class="irp-bronco-score" ${ed} value="${irfuEsc(b.bronco||'')}" placeholder="m:ss" onchange="irfuSetBio(IRFU_PROFILE_NAME,'bronco',this.value)">
+        <input class="irp-in" type="date" ${ed} value="${irfuEsc(b.broncoDate||'')}" style="flex:1" title="Date completed"
+          onchange="irfuSetBio(IRFU_PROFILE_NAME,'broncoDate',this.value);irfuRenderBio()">
+      </div>
+      <div class="irp-bronco-age" style="color:${bCol}">${b.broncoDate?`Last completed ${irfuAgoText(bDays)}`:'No date recorded'}</div>
+    </div>
+    <div class="irp-upd"><i style="background:${fCol}"></i>${F.label}${b.updatedBy&&b.updatedAt===irfuLastUpdated(name)?` by ${irfuEsc(b.updatedBy)}`:''}</div>`;
+}
+function irfuUploadPhoto(input){
+  const file=input.files&&input.files[0];if(!file)return;
+  const img=new Image(),url=URL.createObjectURL(file);
+  img.onload=()=>{
+    const W=240,H=288,c=document.createElement('canvas');c.width=W;c.height=H;
+    const s=Math.max(W/img.width,H/img.height),w=img.width*s,h=img.height*s;
+    c.getContext('2d').drawImage(img,(W-w)/2,(H-h)/2.6,w,h);
+    URL.revokeObjectURL(url);
+    irfuSetBio(IRFU_PROFILE_NAME,'photo',c.toDataURL('image/jpeg',0.82));
+    irfuRenderBio();
+  };
+  img.onerror=()=>toast('Could not read that image','err');
+  img.src=url;
+}
+
+// ---- Load & injury card ----
+function irfuRenderLoad(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-load');if(!el)return;
+  const L=irfuLoadInfo(name),prof=irfuProf(name);
+  const msg=L.level==='red'?`${L.peak} consecutive weeks — at or above the red threshold (${L.cfg.red}). Consider a rest weekend.`
+    :L.level==='amber'?`${L.peak} consecutive weeks — approaching the limit (amber ${L.cfg.amber}, red ${L.cfg.red}).`
+    :`Within limits (amber at ${L.cfg.amber}, red at ${L.cfg.red} weeks in a row).`;
+  const inj=(prof.injuries||[]);
+  el.innerHTML=`<div class="irp-card-hdr">⚡ Load &amp; Injury Risk</div>
+    <div class="irp-load-big"><div class="irp-load-num ${L.level}">${L.peak}</div><div class="irp-load-lbl">consecutive weeks${L.proj>L.cur?' (incl. scheduled)':''}</div></div>
+    <div class="irp-load-banner ${L.level}">${msg}</div>
+    ${L.injured?`<div class="irp-load-banner red">🩹 Open injury recorded below</div>`:''}
+    <div class="irp-stats">
+      <div class="irp-stat"><b>${L.last28}</b><span>last 28 days</span></div>
+      <div class="irp-stat"><b>${L.next28}</b><span>next 28 days</span></div>
+      <div class="irp-stat"><b style="font-size:13px;line-height:19px">${L.nextFree?irfuFmtDate(L.nextFree,{day:'numeric',month:'short'}):'—'}</b><span>next free week</span></div>
+    </div>
+    <div class="irp-strip">${L.strip.map(s=>`<div class="${s.on?'on '+s.lvl:''}${s.un&&!s.on?' na':''}${s.now?' now':''}${s.fut?' fut':''}"
+      title="w/c ${irfuFmtDate(s.wk,{day:'numeric',month:'short'})}${s.games.length?' — '+irfuEsc(s.games.map(g=>g.role+': '+g.text).join(' | ')):s.un?' — unavailable':' — free'}"></div>`).join('')}</div>
+    <div class="irp-strip-lbl"><span>8 wks ago</span><span>this week</span><span>+5 wks</span></div>
+    ${irfuCanEdit()?`<div class="irp-thr">Flag amber at <input type="number" min="1" max="20" value="${L.cfg.amber}" onchange="irfuSetLoadCfg('amber',this.value)">
+      red at <input type="number" min="1" max="20" value="${L.cfg.red}" onchange="irfuSetLoadCfg('red',this.value)"> weeks in a row</div>`:''}
+    <div class="irp-sub">🩹 Injuries</div>
+    ${inj.length?'':'<div class="irp-empty">No injuries recorded</div>'}
+    ${inj.map(i=>`<div class="irp-row${i.done?' done':''}">
+      <input type="date" class="irp-date" value="${irfuEsc(i.date||'')}" onchange="irfuUpdateItem('injuries','${i.id}','date',this.value)">
+      <input class="irp-txt" value="${irfuEsc(i.text||'')}" placeholder="Injury / niggle…" oninput="irfuUpdateItem('injuries','${i.id}','text',this.value)" onchange="irfuRenderLoad()">
+      <label style="font-size:10px;color:var(--txt-dim);display:flex;gap:3px;align-items:center;flex-shrink:0"><input type="checkbox" ${i.done?'checked':''} onchange="irfuToggleDone('injuries','${i.id}',this.checked)">Resolved</label>
+      <button class="irp-del" onclick="irfuDeleteItem('injuries','${i.id}')">×</button></div>`).join('')}
+    <button class="irp-add" onclick="irfuAddItem('injuries')">+ Add injury</button>`;
+}
+function irfuSetLoadCfg(k,v){
+  const n=Math.max(1,Math.min(20,parseInt(v)||0));
+  IRFU_STATE.loadCfg={...irfuLoadCfg(),[k]:n};
+  if(IRFU_STATE.loadCfg.red<IRFU_STATE.loadCfg.amber)IRFU_STATE.loadCfg.red=IRFU_STATE.loadCfg.amber;
+  irfuSave(false);irfuRenderLoad();irfuRenderHeader();
+  if(document.querySelector('.irfu-board'))renderIRFU();
+}
+
+// ---- Games card ----
+function irfuGameRowHTML(r){
+  const today=irfuToday();
+  const score=r.opta&&(r.opta.hs!=null||r.opta.as!=null)?`<span class="irg-score" title="Final score (Opta)">${r.opta.hs??''}–${r.opta.as??''}<span class="irg-opta">OPTA</span></span>`:'';
+  if(r.kind==='opta'){
+    return`<div class="irg-row opta-only"><span class="irg-dlabel">${irfuFmtDate(r.date)}</span>
+      <span class="irg-role r-Referee" style="cursor:default">Referee</span>
+      <span class="irg-txt-ro">${irfuEsc(r.text)}</span>${score}</div>`;
+  }
+  const id=r.it.id,src=r.src;
+  return`<div class="irg-row${r.date===today?' today':''}">
+    <input type="date" class="irp-date" value="${irfuEsc(r.date)}" onchange="irfuUpdateItem('${src}','${id}','date',this.value);irfuRenderGames()">
+    <select class="irg-role ${irfuRoleCls(r.role)}" onchange="irfuUpdateItem('${src}','${id}','role',this.value);this.className='irg-role '+irfuRoleCls(this.value)">
+      ${IRFU_ROLES.map(x=>`<option${x===r.role?' selected':''}>${x}</option>`).join('')}</select>
+    <input class="irp-txt" value="${irfuEsc(r.text)}" placeholder="Competition: Home vs Away — Venue" oninput="irfuUpdateItem('${src}','${id}','text',this.value)">
+    ${score}<button class="irp-del" title="Delete" onclick="irfuDeleteItem('${src}','${id}')">×</button></div>`;
+}
+function irfuRenderGames(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-games');if(!el)return;
+  irfuRenderLoad();
+  const g=irfuGames(name);
+  const prevShown=IRFU_SHOW_ALL_PREV?g.previous:g.previous.slice(0,10);
+  el.innerHTML=`<div class="irp-card">
+      <div class="irp-card-hdr">📅 Upcoming Games <span class="irp-count">${g.upcoming.length}</span></div>
+      ${g.upcoming.length?g.upcoming.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No upcoming appointments</div>'}
+      <button class="irp-add" onclick="irfuAddGame('upcoming')">+ Add game</button>
+    </div>
+    <div class="irp-card">
+      <div class="irp-card-hdr">📋 Previous Games <span class="irp-count">${g.previous.length}</span><span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Opta scores merged in</span></div>
+      ${prevShown.length?prevShown.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No previous games</div>'}
+      ${g.previous.length>10?`<button class="irg-more" onclick="IRFU_SHOW_ALL_PREV=!IRFU_SHOW_ALL_PREV;irfuRenderGames()">${IRFU_SHOW_ALL_PREV?'Show fewer':`Show all ${g.previous.length}`}</button>`:''}
+      <button class="irp-add" onclick="irfuAddGame('previous')">+ Add game</button>
+    </div>`;
+}
+function irfuAddGame(src){
+  const prof=irfuProf(IRFU_PROFILE_NAME);
+  prof[src].push({id:irfuItemId(),text:'',role:'Referee',date:src==='upcoming'?'':'',done:false,priority:''});
+  irfuSave();irfuRenderGames();
+  setTimeout(()=>{const rows=document.querySelectorAll('#irp-games .irp-txt');const empty=[...rows].find(i=>!i.value);if(empty)empty.focus();},30);
+}
+
+// ---- Development board (Current / Upcoming / Target) ----
+function irfuRenderDev(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-dev');if(!el)return;
+  const prof=irfuProf(name);
+  el.innerHTML=IRFU_DEV_COLS.map((c,ci)=>`<div class="irp-devcol" data-col="${c.key}"
+      ondragover="event.preventDefault();this.classList.add('drag-over')" ondragleave="if(!this.contains(event.relatedTarget))this.classList.remove('drag-over')"
+      ondrop="irfuDevDrop(event,'${c.key}')">
+      <div class="irp-devcol-hdr" style="color:${c.color}"><i style="background:${c.color}"></i>${c.label}<span class="irp-count">${prof[c.key].length}</span></div>
+      ${prof[c.key].map(it=>`<div class="irp-devcard" data-id="${it.id}">
+        <span class="irp-devgrip" draggable="true" ondragstart="irfuDevDragStart(event,'${c.key}','${it.id}')" ondragend="irfuDevDragEnd(event)" title="Drag">⠿</span>
+        <div style="flex:1;min-width:0">
+          <textarea class="irp-devtxt" rows="1" placeholder="Type here…" oninput="irfuGrow(this);irfuUpdateItem('${c.key}','${it.id}','text',this.value)">${irfuEsc(it.text||'')}</textarea>
+          ${it.movedAt?`<div class="irp-devmeta">moved ${irfuAgoText(irfuDaysAgo(it.movedAt))}</div>`:''}
+        </div>
+        <div class="irp-devbtns">
+          ${ci>0?`<button title="Move to ${IRFU_DEV_COLS[ci-1].label}" onclick="irfuMoveDev('${c.key}','${IRFU_DEV_COLS[ci-1].key}','${it.id}')">‹</button>`:''}
+          ${ci<2?`<button title="Move to ${IRFU_DEV_COLS[ci+1].label}" onclick="irfuMoveDev('${c.key}','${IRFU_DEV_COLS[ci+1].key}','${it.id}')">›</button>`:''}
+          <button class="x" title="Delete" onclick="irfuDeleteItem('${c.key}','${it.id}')">×</button>
+        </div></div>`).join('')}
+      <button class="irp-add" onclick="irfuAddDev('${c.key}')">+ Add</button>
+    </div>`).join('');
+  el.querySelectorAll('.irp-devtxt').forEach(irfuGrow);
+}
+function irfuGrow(t){t.style.height='auto';t.style.height=t.scrollHeight+'px';}
+function irfuAddDev(col){
+  irfuProf(IRFU_PROFILE_NAME)[col].push({id:irfuItemId(),text:'',created:new Date().toISOString()});
+  irfuSave();irfuRenderDev();
+  setTimeout(()=>{const t=document.querySelectorAll(`#irp-dev [data-col="${col}"] .irp-devtxt`);if(t.length)t[t.length-1].focus();},30);
+}
+function irfuMoveDev(from,to,id,beforeId){
+  const prof=irfuProf(IRFU_PROFILE_NAME);
+  const it=prof[from].find(i=>i.id===id);if(!it)return;
+  prof[from]=prof[from].filter(i=>i.id!==id);
+  if(from!==to)it.movedAt=new Date().toISOString();
+  const idx=beforeId?prof[to].findIndex(i=>i.id===beforeId):-1;
+  if(idx>=0)prof[to].splice(idx,0,it);else prof[to].push(it);
+  irfuSave();irfuRenderDev();
+}
+function irfuDevDragStart(e,col,id){
+  IRFU_DEV_DRAG={col,id};
+  const card=e.target.closest('.irp-devcard');
+  e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',id);
+  if(card){e.dataTransfer.setDragImage(card,10,10);setTimeout(()=>card.classList.add('dragging'),0);}
+}
+function irfuDevDragEnd(e){
+  document.querySelectorAll('.irp-devcard.dragging').forEach(c=>c.classList.remove('dragging'));
+  document.querySelectorAll('.irp-devcol.drag-over').forEach(c=>c.classList.remove('drag-over'));
+}
+function irfuDevDrop(e,toCol){
+  e.preventDefault();
+  if(!IRFU_DEV_DRAG)return;
+  const{col,id}=IRFU_DEV_DRAG;IRFU_DEV_DRAG=null;
+  const target=e.target.closest('.irp-devcard');
+  const beforeId=target&&target.dataset.id!==id?target.dataset.id:null;
+  irfuMoveDev(col,toCol,id,beforeId);
+}
+
+// ---- Notes ----
+function irfuRenderNotes(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-notes');if(!el)return;
+  const notes=[...irfuProf(name).notes].sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+  el.innerHTML=`<div class="irp-card-hdr">📝 Notes <span class="irp-count">${notes.length}</span></div>
+    <button class="irp-add" style="margin-bottom:8px" onclick="irfuAddNote()">+ New note</button>
+    ${notes.length?'':'<div class="irp-empty">No notes yet</div>'}
+    ${notes.map(n=>`<div class="irp-note">
+      <div class="irp-note-top"><input type="date" class="irp-date" value="${irfuEsc(n.date||'')}" onchange="irfuUpdateItem('notes','${n.id}','date',this.value)">
+        <span style="flex:1"></span><button class="irp-del" onclick="irfuDeleteItem('notes','${n.id}')">×</button></div>
+      <textarea rows="2" placeholder="Write a note…" oninput="irfuGrow(this);irfuUpdateItem('notes','${n.id}','text',this.value)">${irfuEsc(n.text||'')}</textarea>
+    </div>`).join('')}`;
+  el.querySelectorAll('textarea').forEach(irfuGrow);
+}
+function irfuAddNote(){
+  irfuProf(IRFU_PROFILE_NAME).notes.push({id:irfuItemId(),text:'',date:irfuToday()});
+  irfuSave();irfuRenderNotes();
+  setTimeout(()=>{const t=document.querySelector('#irp-notes textarea');if(t)t.focus();},30);
+}
+
+// ---- Calendar ----
+function irfuToggleUnavail(iso){
+  if(!irfuCanEdit())return;
+  const prof=irfuProf(IRFU_PROFILE_NAME);
+  prof.unavail=prof.unavail.includes(iso)?prof.unavail.filter(d=>d!==iso):[...prof.unavail,iso];
+  irfuSave();irfuRenderCalendar();irfuRenderLoad();irfuAfterChange();
+}
+function irfuCalShift(n){
+  const[y,m]=IRFU_CAL_MONTH.split('-').map(Number);const d=new Date(y,m-1+n,1);
+  IRFU_CAL_MONTH=`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;irfuRenderCalendar();
+}
+function irfuRenderCalendar(){
+  const name=IRFU_PROFILE_NAME,el=document.getElementById('irfu-cal');if(!el)return;
+  const prof=irfuProf(name),L=irfuLoadInfo(name),today=irfuToday();
+  const byDay={};L.games.all.forEach(r=>{if(r.date)(byDay[r.date]=byDay[r.date]||[]).push(r);});
+  const unav=new Set(prof.unavail||[]);
+  const chip=r=>`<div class="irc-game ${irfuRoleCls(r.role)}" title="${irfuEsc(r.role+' — '+r.text)}">${r.role!=='Referee'?`<b>${r.role}</b> `:''}${irfuEsc(r.text.replace(/\s*[—–].*$/,''))}</div>`;
+  const legend=`<div class="irc-legend">
+    <span><i style="background:#1a6b3e"></i>Referee</span><span><i style="background:#2f5fb3"></i>AR</span>
+    <span><i style="background:#7a3fb0"></i>TMO</span><span><i style="background:#6b7a70"></i>No.4 / No.5</span>
+    <span><i style="background:#f0f7ff;border:1px solid #cfe0f5"></i>Free weekend</span>
+    <span><i style="background:repeating-linear-gradient(45deg,#fdecea 0 3px,#fff 3px 6px);border:1px solid #f3c5c0"></i>Unavailable</span></div>`;
+  const viewBtns=`<button class="irc-btn${IRFU_CAL_VIEW==='month'?' on':''}" onclick="IRFU_CAL_VIEW='month';irfuRenderCalendar()">Month</button>
+    <button class="irc-btn${IRFU_CAL_VIEW==='season'?' on':''}" onclick="IRFU_CAL_VIEW='season';irfuRenderCalendar()">Season weekends</button>`;
+  if(IRFU_CAL_VIEW==='season'){
+    const t=irfuParseISO(today),sy=t.getMonth()>=6?t.getFullYear():t.getFullYear()-1;
+    let html='',worked=0,free=0;
+    for(let mi=0;mi<11;mi++){
+      const md=new Date(sy,7+mi,1),y=md.getFullYear(),m=md.getMonth();
+      let wk=irfuWeekKey(irfuISO(md)),rows='';
+      while(true){
+        const sat=irfuAddDays(wk,5);const satD=irfuParseISO(sat);
+        if(satD.getMonth()!==m||satD.getFullYear()!==y){if(satD>new Date(y,m+1,0))break;wk=irfuAddDays(wk,7);continue;}
+        const gs=L.weeks.get(wk)||[];
+        const un=[...Array(7)].some((_,i)=>unav.has(irfuAddDays(wk,i)));
+        const past=irfuAddDays(wk,6)<today;
+        if(past){gs.length?worked++:free++;}
+        const col=gs.length?({'Referee':'#1a6b3e','TMO':'#7a3fb0','AR1':'#2f5fb3','AR2':'#2f5fb3'}[gs[0].role]||'#6b7a70'):un?'#e8a39c':'#dfe7e1';
+        rows+=`<div class="irc-wk"${wk===irfuWeekKey(today)?' style="font-weight:700"':''}><span class="irc-wk-d">Sat ${satD.getDate()}</span><span class="irc-wk-s" style="background:${col}"></span>
+          <span class="irc-wk-t" title="${irfuEsc(gs.map(g=>g.role+': '+g.text).join(' | '))}">${gs.length?irfuEsc(gs.map(g=>(g.role!=='Referee'?g.role+' · ':'')+g.text.replace(/\s*[—–].*$/,'')).join(' | ')):un?'<span style="color:var(--red)">Unavailable</span>':'<span style="color:var(--txt-faint)">Free</span>'}</span></div>`;
+        wk=irfuAddDays(wk,7);
+      }
+      html+=`<div class="irc-month"><h4>${md.toLocaleDateString('en-IE',{month:'long',year:'numeric'})}</h4>${rows}</div>`;
+    }
+    el.innerHTML=`<div class="irc-bar"><h3>${sy}–${String(sy+1).slice(-2)} season</h3>${viewBtns}</div>
+      <div class="irc-sum"><div><b>${worked}</b>weeks with a game so far</div><div><b>${free}</b>weeks off so far</div><div><b>${L.peak}</b>consecutive weeks now</div></div>
+      <div class="irc-season">${html}</div>${legend}`;
+    return;
+  }
+  const[y,m]=IRFU_CAL_MONTH.split('-').map(Number);
+  const first=new Date(y,m-1,1),last=new Date(y,m,0);
+  let d=irfuWeekKey(irfuISO(first));const end=irfuAddDays(irfuWeekKey(irfuISO(last)),6);
+  let cells='',mGames=0,wkWorked=0,wkFree=0;
+  while(d<=end){
+    const wkGames=L.weeks.get(irfuWeekKey(d))||[];
+    for(let i=0;i<7;i++){
+      const iso=irfuAddDays(d,i),dd=irfuParseISO(iso),inM=dd.getMonth()===m-1,wkend=i>=4;
+      const gs=byDay[iso]||[];if(inM)mGames+=gs.length;
+      const freeWk=wkend&&!wkGames.length&&!unav.has(iso);
+      cells+=`<div class="irc-day${wkend?' wkend':''}${inM?'':' out'}${iso===today?' today':''}${unav.has(iso)?' unav':''}${freeWk&&inM?' free-wkend':''}"
+        onclick="irfuToggleUnavail('${iso}')" title="${irfuCanEdit()?'Click to mark unavailable / available':''}">
+        <div class="irc-dnum"><span>${dd.getDate()}</span>${unav.has(iso)?'<span class="irc-unav-lbl">N/A</span>':''}</div>${gs.map(chip).join('')}</div>`;
+    }
+    const sat=irfuParseISO(irfuAddDays(d,5));
+    if(sat.getMonth()===m-1){wkGames.length?wkWorked++:wkFree++;}
+    d=irfuAddDays(d,7);
+  }
+  el.innerHTML=`<div class="irc-bar">
+      <button class="irc-btn" onclick="irfuCalShift(-1)">‹</button>
+      <h3>${first.toLocaleDateString('en-IE',{month:'long',year:'numeric'})}</h3>
+      <button class="irc-btn" onclick="irfuCalShift(1)">›</button>
+      <button class="irc-btn" onclick="IRFU_CAL_MONTH=irfuToday().slice(0,7);irfuRenderCalendar()">Today</button>
+      <span style="flex:1"></span>${viewBtns}</div>
+    <div class="irc-sum"><div><b>${mGames}</b>games this month</div><div><b>${wkWorked}</b>weekends with a game</div><div><b>${wkFree}</b>free weekends</div><div><b>${L.peak}</b>consecutive weeks now</div></div>
+    <div class="irc-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="irc-dow">${x}</div>`).join('')}${cells}</div>
+    ${legend}<div class="irc-hint">Click any day to mark the referee unavailable (holiday, work, injury). Games come from Upcoming / Previous Games and Opta.</div>`;
 }
 
 let SEL_REFSTATS_T=null;
