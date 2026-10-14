@@ -452,11 +452,18 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
 .irg-row .irg-score+.irp-del{margin-left:0}
 .irg-dlabel{font-size:11px;color:var(--txt-dim);padding-left:2px}
 .irg-role{font-size:10px;font-weight:800;border-radius:6px;padding:3px 4px;border:none;color:#fff;text-align:center;cursor:pointer;appearance:none;-webkit-appearance:none}
-.irg-role.r-Referee{background:#1a6b3e}.irg-role.r-AR1,.irg-role.r-AR2{background:#2f5fb3}.irg-role.r-TMO{background:#7a3fb0}.irg-role.r-No4,.irg-role.r-No5{background:#6b7a70}
+.irg-role.r-Referee{background:#1a6b3e}.irg-role.r-AR1,.irg-role.r-AR2{background:#2f5fb3}.irg-role.r-TMO{background:#7a3fb0}.irg-role.r-FPRO{background:#b0457a}.irg-role.r-No4,.irg-role.r-No5{background:#6b7a70}
 .irg-txt-ro{font-size:12px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .irg-score{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:14px;color:var(--green);white-space:nowrap}
 .irg-opta{font-size:8px;font-weight:800;letter-spacing:.6px;background:var(--green-dim);color:var(--green);padding:1px 5px;border-radius:6px;margin-left:4px;vertical-align:middle}
 .irg-more{font-size:11px;font-weight:600;color:var(--txt-dim);padding:4px 2px}
+.irg-list{overflow-y:auto;margin:0 -4px 4px;padding:0 4px;overscroll-behavior:contain}
+.irg-list.scrolls{border-bottom:1px solid var(--border-light);box-shadow:inset 0 -10px 8px -10px rgba(0,0,0,.15)}
+.irg-tally{display:flex;flex-wrap:wrap;gap:5px;margin:-4px 0 10px}
+.irg-tally span{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--txt-dim);background:var(--bg);border-radius:8px;padding:2px 8px}
+.irg-tally b{color:var(--txt);font-weight:800}
+.irg-tally i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.irg-tally .zero{opacity:.45}
 .irg-more:hover{color:var(--green)}
 /* Development board */
 .irp-dev{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
@@ -495,7 +502,7 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
 .irc-day.free-wkend{background:#f0f7ff}
 .irc-dnum{font-size:11px;font-weight:700;color:var(--txt-dim);display:flex;justify-content:space-between}
 .irc-game{font-size:10px;line-height:1.25;border-radius:5px;padding:3px 5px;color:#fff;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}
-.irc-game.r-Referee{background:#1a6b3e}.irc-game.r-AR1,.irc-game.r-AR2{background:#2f5fb3}.irc-game.r-TMO{background:#7a3fb0}.irc-game.r-No4,.irc-game.r-No5{background:#6b7a70}
+.irc-game.r-Referee{background:#1a6b3e}.irc-game.r-AR1,.irc-game.r-AR2{background:#2f5fb3}.irc-game.r-TMO{background:#7a3fb0}.irc-game.r-FPRO{background:#b0457a}.irc-game.r-No4,.irc-game.r-No5{background:#6b7a70}
 .irc-unav-lbl{font-size:9px;font-weight:700;color:var(--red)}
 .irc-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--txt-dim);margin-top:10px}
 .irc-legend span{display:inline-flex;align-items:center;gap:5px}
@@ -509,6 +516,24 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
 .irc-wk-s{width:10px;height:10px;border-radius:3px;flex-shrink:0;background:#dfe7e1}
 .irc-wk-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .irc-hint{font-size:11px;color:var(--txt-faint);margin-top:6px}
+.irg-mx{font-size:8px;font-weight:800;letter-spacing:.6px;background:#e8eefb;color:#2f5fb3;padding:2px 6px;border-radius:6px}
+.irg-row.mx-row{background:#fbfcff}
+.irc-unav-lbl.inj{color:#fff;background:var(--red);padding:0 4px;border-radius:4px}
+.irfu-mx-status{font-size:11px;color:var(--txt-dim)}
+.mx-modal{width:min(980px,100%)}
+.mx-un{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:7px 0;border-top:1px solid var(--border-light)}
+.mx-un:first-of-type{border-top:none}
+.mx-un-l{flex:1 1 220px;min-width:0;display:flex;flex-direction:column;font-size:12px}
+.mx-un-l span{font-size:11px;color:var(--txt-faint)}
+.mx-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:6px}
+.mx-ref{background:var(--bg);border:1px solid var(--border-light);border-radius:8px;padding:6px 9px;font-size:12px}
+.mx-ref summary{cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.mx-ref summary span{font-size:11px;color:var(--txt-faint)}
+.mx-a{display:flex;gap:6px;align-items:center;padding:3px 0;font-size:11px;border-top:1px solid var(--border-light)}
+.mx-a span{width:44px;color:var(--txt-faint);flex-shrink:0}
+.mx-a i{font-style:normal;font-size:9px;padding:1px 5px;border-radius:5px;flex-shrink:0}
+.mx-foot{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.mx-foot span{flex:1 1 260px;font-size:11px;color:var(--txt-faint)}
 @media(max-width:900px){
   .irp-grid{grid-template-columns:1fr}
   .irp-games{grid-template-columns:1fr}
@@ -1244,6 +1269,7 @@ const IRFU_CATS=[
   {id:'l2',label:'Level 2',color:'#1a5c36'},
   {id:'l3',label:'Level 3',color:'#1a5c36'},
   {id:'devgrp',label:'Development Group',color:'#1a5c36'},
+  {id:'tmo',label:'TMO',color:'#1a5c36'},
 ];
 const IRFU_ALL_NAMES=[
   'Andy Brace','Eoghan Cross','Robbie Jenkinson','Peter Martin',
@@ -1251,7 +1277,8 @@ const IRFU_ALL_NAMES=[
   'Dermot Blake','Dan Carson','George Clancy','Stuart Douglas','Jonny Erskine','Andrew Fogarty','Stuart Gaffikin','Shane Gaughan','Sam Holt','Chris Lough','Robbie McGreer',"Paul O'Connor","Tomas O'Sullivan",'Padraic Reidy','Henry Richmond','Ross Whitfield',
   'Kevin Beakey','Kevin Coffey','Chris Elliot','Mitch Enderby','Paul Haycock','John Lillis','Ethan Lyons','Peter McClure','Andrew Mitchell','Graeme Ormiston','Oisin Quinn','Paudie Sheehan','Shane Tuohy',
   'Brían Bennett','Fergal Brislane','Chris Cahoon','Stuart Campbell','Sean Kearns','Andrew Munce',"Ciaran O'Flynn","Euan O'Riordan",'Johnny Quinn','Michael Reidy','Cathal Roddy','John Purcell','Ross Shaughnessy',
-  'Siobhan Daly','Alana Kerr','Jack Kingston','Morgan McCartney','Emma Murphy','Matthew Murphy',"Ruaidhri O'Hanlon",'Cillian Pegley'
+  'Siobhan Daly','Alana Kerr','Jack Kingston','Morgan McCartney','Emma Murphy','Matthew Murphy',"Ruaidhri O'Hanlon",'Cillian Pegley',
+  'Leo Colgan','Olly Hodges','Brian MacNeice','Mark Patton','Collin Stanley'
 ];
 const IRFU_DEFAULT={
   hp:['Andy Brace','Eoghan Cross','Robbie Jenkinson','Peter Martin'],
@@ -1260,6 +1287,7 @@ const IRFU_DEFAULT={
   l2:['Kevin Beakey','Kevin Coffey','Chris Elliot','Mitch Enderby','Paul Haycock','John Lillis','Ethan Lyons','Peter McClure','Andrew Mitchell','Graeme Ormiston','Oisin Quinn','Paudie Sheehan','Shane Tuohy'],
   l3:['Brían Bennett','Fergal Brislane','Chris Cahoon','Stuart Campbell','Sean Kearns','Andrew Munce',"Ciaran O'Flynn","Euan O'Riordan",'Johnny Quinn','Michael Reidy','Cathal Roddy','John Purcell','Ross Shaughnessy'],
   devgrp:['Siobhan Daly','Alana Kerr','Jack Kingston','Morgan McCartney','Emma Murphy','Matthew Murphy',"Ruaidhri O'Hanlon",'Cillian Pegley'],
+  tmo:['Leo Colgan','Olly Hodges','Brian MacNeice','Mark Patton','Collin Stanley'],
   pool:[]
 };
 const IRFU_PROF_FIELDS=[
@@ -1402,6 +1430,15 @@ async function irfuLoad(){
   if(IRFU_STATE&&(IRFU_STATE.elite!==undefined||IRFU_STATE.dev!==undefined||!IRFU_STATE.hp)){
     IRFU_STATE=JSON.parse(JSON.stringify(IRFU_DEFAULT));
   }
+  if(!Array.isArray(IRFU_STATE.tmo)){
+    // Added Oct 2026: TMO row at the bottom of the board
+    const lc=n=>n.toLowerCase().trim(),tm=IRFU_DEFAULT.tmo.map(lc);
+    IRFU_STATE.tmo=[...IRFU_DEFAULT.tmo];
+    if(Array.isArray(IRFU_STATE.pool))IRFU_STATE.pool=IRFU_STATE.pool.filter(n=>!tm.includes(lc(n)));
+    // a name typed in at a matrix import (e.g. "Sean Colgan") is swapped for the real TMO
+    if(IRFU_STATE.matrixAliases)Object.keys(IRFU_STATE.matrixAliases).forEach(k=>{const v=IRFU_STATE.matrixAliases[k];
+      if(v==='__skip'||!tm.includes(lc(v)))delete IRFU_STATE.matrixAliases[k];});
+  }
   if(!Array.isArray(IRFU_STATE.pool)){
     const inCats=new Set(IRFU_CATS.flatMap(c=>IRFU_STATE[c.id]||[]));
     IRFU_STATE.pool=IRFU_ALL_NAMES.filter(n=>!inCats.has(n));
@@ -1410,7 +1447,7 @@ async function irfuLoad(){
     try{const s=localStorage.getItem('irfu_profiles');if(s)IRFU_PROFILES=JSON.parse(s);}catch(e){}
   }
   if(!IRFU_PROFILES)IRFU_PROFILES={};
-  await irfuLoadBios();
+  await Promise.all([irfuLoadBios(),irfuLoadMatrix()]);
 }
 function irfuSave(touch=true){
   // Stamp "last updated" on the referee whose page is open
@@ -1500,7 +1537,7 @@ function irfuItemId(){return Date.now().toString(36)+Math.random().toString(36).
 // ---- Board chip rendering ----
 function irfuHasNotes(name){
   const b=typeof irfuBio==='function'?irfuBio(name):{};
-  if(['dob','club','province','height','weight','bronco','photo'].some(k=>b[k]))return true;
+  if(['dob','province','height','weight','bronco','photo'].some(k=>b[k]))return true; // club alone (auto-filled from the matrix) doesn't count
   const prof=IRFU_PROFILES&&IRFU_PROFILES[name];
   if(!prof)return false;
   return IRFU_PROF_FIELDS.some(f=>(prof[f.key]||[]).some(i=>i.text&&i.text.trim()));
@@ -1566,6 +1603,10 @@ async function renderIRFU(){
         <span>📋</span> Upload Appointments
       </button>
       <input type="file" id="irfu-csv-input" accept=".csv" style="display:none" onchange="irfuHandleCSVUpload(this)">
+      ${irfuCanUploadMatrix()?`<button class="irfu-filter-btn" onclick="document.getElementById('irfu-mx-input').click()" style="gap:5px;background:var(--green);color:#fff;border-color:var(--green)" title="Upload the AIL Matrix .xlsx from SharePoint">
+        <span>📊</span> Upload AIL Matrix</button>
+      <input type="file" id="irfu-mx-input" accept=".xlsx,.xlsm,.xls" style="display:none" onchange="irfuHandleMatrixUpload(this)">`:''}
+      ${IRFU_MATRIX?`<span class="irfu-mx-status" title="${irfuEsc(IRFU_MATRIX.fileName||'')}">Matrix: uploaded ${irfuAgoText(irfuDaysAgo(IRFU_MATRIX.importedAt))}${IRFU_MATRIX.importedBy?' by '+irfuEsc(IRFU_MATRIX.importedBy):''}${IRFU_MATRIX.filledTo?` · filled to ${irfuFmtDate(IRFU_MATRIX.filledTo,{day:'numeric',month:'short'})}`:''}</span>`:''}
       <button class="irfu-filter-btn" onclick="irfuDownloadCSVTemplate()" style="gap:5px;opacity:0.7" title="Download blank CSV template">
         <span>⬇️</span> CSV Template
       </button>
@@ -1645,9 +1686,8 @@ function irfuAddName(){
 }
 function irfuReset(){
   if(!confirm('Reset to the 2026-27 National Referee Panel? Any custom changes will be lost.'))return;
-  const loadCfg=IRFU_STATE&&IRFU_STATE.loadCfg;
-  IRFU_STATE=JSON.parse(JSON.stringify(IRFU_DEFAULT));
-  if(loadCfg)IRFU_STATE.loadCfg=loadCfg;
+  const keep={};['loadCfg','matrixOwner','matrixAliases'].forEach(k=>{if(IRFU_STATE&&IRFU_STATE[k])keep[k]=IRFU_STATE[k];});
+  IRFU_STATE={...JSON.parse(JSON.stringify(IRFU_DEFAULT)),...keep};
   irfuSave(false);renderIRFU();
 }
 function irfuToggleNotesFilter(){
@@ -1757,7 +1797,7 @@ async function irfuImportAppointments(appointments){
     const field=appt.date<=today?'previous':'upcoming';
     // Build note text
     let roleTag=appt.role&&appt.role!=='Referee'?` (${appt.role})`:'';
-    const noteText=`${appt.comp}: ${appt.home} vs ${appt.away} — ${appt.venue}${appt.time?', '+appt.time:''}${roleTag}`;
+    const noteText=`${irfuShortComp(appt.comp)}: ${appt.home} vs ${appt.away} — ${appt.venue}${appt.time?', '+appt.time:''}${roleTag}`;
     // Priority — not auto-assigned; set manually per game if needed
     const priority='';
     // Load existing profile
@@ -1885,7 +1925,7 @@ function irfuRefreshChipDot(name){
 }
 
 // ===================== REFEREE PAGE =====================
-const IRFU_ROLES=['Referee','AR1','AR2','TMO','No.4','No.5'];
+const IRFU_ROLES=['Referee','AR1','AR2','TMO','FPRO','No.4','No.5'];
 const IRFU_DEV_COLS=[
   {key:'dev_current',label:'Current',color:'#1a6b3e'},
   {key:'dev_upcoming',label:'Upcoming',color:'#2f5fb3'},
@@ -1911,7 +1951,7 @@ function irfuNormRole(r){
   const s=(r||'').toLowerCase().replace(/\s+/g,'');
   if(!s||s==='referee'||s==='ref')return'Referee';
   if(s==='ar1')return'AR1';if(s==='ar2'||s==='ar')return s==='ar'?'AR1':'AR2';
-  if(s==='tmo')return'TMO';
+  if(s==='tmo')return'TMO';if(s==='fpro')return'FPRO';
   if(s.includes('4'))return'No.4';if(s.includes('5'))return'No.5';
   return'Referee';
 }
@@ -1983,24 +2023,41 @@ function irfuTeamsFromText(text){
   const parts=mid.split(/\s+vs?\.?\s+/);
   return parts.length>=2?{h:parts[0].trim(),a:parts[1].trim()}:null;
 }
-function irfuOverlap(a,b){a=(a||'').toLowerCase();b=(b||'').toLowerCase();return!!a&&!!b&&(a.includes(b)||b.includes(a));}
+function irfuShortComp(t){return String(t||'').replace(/\bUnited Rugby Championship\b/gi,'URC');}
+function irfuOverlap(a,b){a=(a||'').toLowerCase().replace(/[^a-z0-9]/g,'');b=(b||'').toLowerCase().replace(/[^a-z0-9]/g,'');return!!a&&!!b&&(a.includes(b)||b.includes(a));}
+function irfuSameFixture(t,u,textA,textB){
+  return t&&u?(irfuOverlap(t.h,u.h)||irfuOverlap(t.a,u.a)||irfuOverlap(t.h,u.a)||irfuOverlap(t.a,u.h)):irfuOverlap(textA,textB);
+}
 function irfuGames(name){
   const prof=(IRFU_PROFILES||{})[name]||{};
   const opta=irfuOptaFor(name),used=new Set(),rows=[];
-  ['upcoming','previous'].forEach(src=>(prof[src]||[]).forEach(it=>{
-    // one-off tidy: pull "(AR1)" etc. out of the text into a proper role field
-    if(!it.role){const sr=irfuSplitRole(it);if(sr.text!==(it.text||'')){it.role=sr.role;it.text=sr.text;}}
-    const{role,text}=irfuSplitRole(it);
-    const t=irfuTeamsFromText(text);
+  const optaFor=(t,date,exact)=>{
     let o=null;
     opta.forEach((x,i)=>{
       if(o||used.has(i))return;
       const teams=t&&irfuOverlap(t.h,x.home)&&irfuOverlap(t.a,x.away);
-      const near=it.date&&Math.abs((irfuParseISO(it.date)-irfuParseISO(x.iso))/864e5)<=3;
-      if((it.date===x.iso&&(!t||teams))||(teams&&near)){o=x;used.add(i);}
+      const near=date&&Math.abs((irfuParseISO(date)-irfuParseISO(x.iso))/864e5)<=3;
+      if((exact&&date===x.iso&&!t)||(teams&&near)){o=x;used.add(i);}
     });
-    rows.push({kind:'item',src,it,role,text,date:it.date||'',opta:o});
+    return o;
+  };
+  // 1) AIL matrix (shared) is the main source
+  const mx=((irfuMatrixFor(name)||{}).appts||[]).map(a=>{
+    const text=irfuShortComp(a.text),t=irfuTeamsFromText(text),o=optaFor(t,a.date,false);
+    return{kind:'matrix',role:a.role||'Referee',text,t,date:o?o.iso:a.date,opta:o};
+  });
+  // 2) Games typed in / CSV-imported — hidden when the matrix already has that game
+  ['upcoming','previous'].forEach(src=>(prof[src]||[]).forEach(it=>{
+    // one-off tidy: pull "(AR1)" etc. out of the text into a proper role field
+    if(!it.role){const sr=irfuSplitRole(it);if(sr.text!==(it.text||'')){it.role=sr.role;it.text=sr.text;}}
+    if(it.text&&/United Rugby Championship/i.test(it.text))it.text=irfuShortComp(it.text);
+    const{role,text}=irfuSplitRole(it);
+    const t=irfuTeamsFromText(text);
+    if(it.date&&text&&mx.some(m=>irfuWeekKey(m.date)===irfuWeekKey(it.date)&&irfuSameFixture(t,m.t,text,m.text)))return;
+    rows.push({kind:'item',src,it,role,text,date:it.date||'',opta:optaFor(t,it.date,true)});
   }));
+  rows.push(...mx);
+  // 3) Opta games not in either list
   opta.forEach((x,i)=>{if(!used.has(i))rows.push({kind:'opta',role:'Referee',text:`${x.home} vs ${x.away}`,date:x.iso,opta:x});});
   const today=irfuToday();
   const upcoming=rows.filter(r=>r.date?r.date>=today:r.src==='upcoming').sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999'));
@@ -2030,17 +2087,19 @@ function irfuLoadInfo(name){
   const next28=g.all.filter(r=>r.date&&r.date>today&&r.date<=to28).length;
   let nextFree=null;
   for(let i=0;i<20;i++){const wk=irfuAddDays(thisWk,i*7);if(!weeks.has(wk)){nextFree=wk;break;}}
-  const injured=(prof.injuries||[]).some(i=>!i.done&&(i.text||'').trim());
+  const unav=irfuUnavailMap(name);
+  const mxInj=[...Array(7)].some((_,i)=>unav.get(irfuAddDays(thisWk,i))==='INJ');
+  const injured=mxInj||(prof.injuries||[]).some(i=>!i.done&&(i.text||'').trim());
   const flag=injured?'red':level;
   // Week strip: 8 weeks back, 5 ahead; colour each run by its length so far
   const strip=[];
   for(let i=-8;i<=5;i++){
     const wk=irfuAddDays(thisWk,i*7);
     let run=0,j=wk;while(weeks.has(j)){run++;j=irfuAddDays(j,-7);}
-    const un=(prof.unavail||[]).some(d=>irfuWeekKey(d)===wk);
+    const un=[...unav.keys()].some(d=>irfuWeekKey(d)===wk);
     strip.push({wk,on:weeks.has(wk),lvl:lvl(run),now:i===0,fut:i>0,un,games:weeks.get(wk)||[]});
   }
-  return{cfg,cur,proj,peak,level,flag,injured,last28,next28,nextFree,strip,weeks,games:g};
+  return{cfg,cur,proj,peak,level,flag,injured,mxInj,unav,last28,next28,nextFree,strip,weeks,games:g};
 }
 
 // ---- Page open/close ----
@@ -2093,6 +2152,7 @@ function irfuSwitchPageTab(tab){
   IRFU_PAGE_TAB=tab;
   document.querySelectorAll('.irp-tab').forEach(b=>b.classList.toggle('on',b.dataset.tab===tab));
   document.querySelectorAll('.irp-body').forEach(d=>{d.style.display=d.dataset.tab===tab?'':'none';});
+  if(tab==='overview')irfuSizeGameLists();
   if(tab==='calendar')irfuRenderCalendar();
   if(tab==='team')irfuRenderTeamNotesPane(IRFU_PROFILE_NAME);
 }
@@ -2196,7 +2256,7 @@ function irfuRenderLoad(){
   el.innerHTML=`<div class="irp-card-hdr">⚡ Load &amp; Injury Risk</div>
     <div class="irp-load-big"><div class="irp-load-num ${L.level}">${L.peak}</div><div class="irp-load-lbl">consecutive weeks${L.proj>L.cur?' (incl. scheduled)':''}</div></div>
     <div class="irp-load-banner ${L.level}">${msg}</div>
-    ${L.injured?`<div class="irp-load-banner red">🩹 Open injury recorded below</div>`:''}
+    ${L.mxInj?`<div class="irp-load-banner red">🩹 Marked INJ on the AIL matrix this week</div>`:L.injured?`<div class="irp-load-banner red">🩹 Open injury recorded below</div>`:''}
     <div class="irp-stats">
       <div class="irp-stat"><b>${L.last28}</b><span>last 28 days</span></div>
       <div class="irp-stat"><b>${L.next28}</b><span>next 28 days</span></div>
@@ -2227,42 +2287,71 @@ function irfuSetLoadCfg(k,v){
 // ---- Games card ----
 function irfuGameRowHTML(r){
   const today=irfuToday();
-  const score=r.opta&&(r.opta.hs!=null||r.opta.as!=null)?`<span class="irg-score" title="Final score (Opta)">${r.opta.hs??''}–${r.opta.as??''}<span class="irg-opta">OPTA</span></span>`:'';
-  if(r.kind==='opta'){
-    return`<div class="irg-row opta-only"><span class="irg-dlabel">${irfuFmtDate(r.date)}</span>
-      <span class="irg-role r-Referee" style="cursor:default">Referee</span>
-      <span class="irg-txt-ro">${irfuEsc(r.text)}</span>${score}</div>`;
+  const score=r.opta&&(r.opta.hs!=null||r.opta.as!=null)?`<span class="irg-score" title="Final score (Opta)">${r.opta.hs??''}–${r.opta.as??''}</span>`:'';
+  if(r.opta){
+    // Opta has this game → show the Opta version (actual date, Opta team names, final score)
+    const comp=r.kind!=='opta'&&/^[^:]{2,40}:/.test(r.text)?r.text.split(':')[0]+': ':'';
+    const del=r.kind==='item'?`<button class="irp-del" title="Delete" onclick="irfuDeleteItem('${r.src}','${r.it.id}')">×</button>`:'';
+    return`<div class="irg-row opta-only"><span class="irg-dlabel">${irfuFmtDate(r.opta.iso)}</span>
+      <span class="irg-role ${irfuRoleCls(r.role)}" style="cursor:default">${irfuEsc(r.role)}</span>
+      <span class="irg-txt-ro">${irfuEsc(comp+r.opta.home+' vs '+r.opta.away)}</span>${score}<span class="irg-opta">OPTA</span>${del}</div>`;
+  }
+  if(r.kind==='matrix'){
+    return`<div class="irg-row mx-row${r.date===today?' today':''}" title="From the AIL matrix — edit it in the matrix and re-upload"><span class="irg-dlabel">${irfuFmtDate(r.date)}</span>
+      <span class="irg-role ${irfuRoleCls(r.role)}" style="cursor:default">${irfuEsc(r.role)}</span>
+      <span class="irg-txt-ro">${irfuEsc(r.text)}</span>${score}<span class="irg-mx">MATRIX</span></div>`;
   }
   const id=r.it.id,src=r.src;
   return`<div class="irg-row${r.date===today?' today':''}">
     <input type="date" class="irp-date" value="${irfuEsc(r.date)}" onchange="irfuUpdateItem('${src}','${id}','date',this.value);irfuRenderGames()">
     <select class="irg-role ${irfuRoleCls(r.role)}" onchange="irfuUpdateItem('${src}','${id}','role',this.value);this.className='irg-role '+irfuRoleCls(this.value)">
       ${IRFU_ROLES.map(x=>`<option${x===r.role?' selected':''}>${x}</option>`).join('')}</select>
-    <input class="irp-txt" value="${irfuEsc(r.text)}" placeholder="Competition: Home vs Away — Venue" oninput="irfuUpdateItem('${src}','${id}','text',this.value)">
+    <input class="irp-txt" value="${irfuEsc(r.text)}" placeholder="e.g. URC: Leinster vs Munster — Aviva" oninput="irfuUpdateItem('${src}','${id}','text',this.value)">
     ${score}<button class="irp-del" title="Delete" onclick="irfuDeleteItem('${src}','${id}')">×</button></div>`;
+}
+function irfuRoleTally(rows){
+  const c={Referee:0,AR:0,No4:0,No5:0,TMO:0,FPRO:0};
+  rows.forEach(r=>{const k=/^AR/.test(r.role)?'AR':r.role==='No.4'?'No4':r.role==='No.5'?'No5':r.role;if(k in c)c[k]++;});
+  const items=[['Referee','Referee','#1a6b3e'],['AR','AR','#2f5fb3'],['No4','No.4','#6b7a70'],['No5','No.5','#6b7a70'],['TMO','TMO','#7a3fb0']];
+  if(c.FPRO)items.push(['FPRO','FPRO','#b0457a']);
+  return`<div class="irg-tally">${items.map(([k,l,col])=>`<span class="${c[k]?'':'zero'}"><i style="background:${col}"></i>${l} <b>${c[k]}</b></span>`).join('')}</div>`;
 }
 function irfuRenderGames(){
   const name=IRFU_PROFILE_NAME,el=document.getElementById('irp-games');if(!el)return;
   irfuRenderLoad();
   const g=irfuGames(name);
-  const prevShown=IRFU_SHOW_ALL_PREV?g.previous:g.previous.slice(0,10);
   el.innerHTML=`<div class="irp-card">
-      <div class="irp-card-hdr">📅 Upcoming Games <span class="irp-count">${g.upcoming.length}</span></div>
-      ${g.upcoming.length?g.upcoming.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No upcoming appointments</div>'}
+      <div class="irp-card-hdr">📅 Upcoming Games <span class="irp-count">${g.upcoming.length} total</span><span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Next first</span></div>
+      ${irfuRoleTally(g.upcoming)}
+      <div class="irg-list">${g.upcoming.length?g.upcoming.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No upcoming appointments</div>'}</div>
       <button class="irp-add" onclick="irfuAddGame('upcoming')">+ Add game</button>
     </div>
     <div class="irp-card">
-      <div class="irp-card-hdr">📋 Previous Games <span class="irp-count">${g.previous.length}</span><span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Opta scores merged in</span></div>
-      ${prevShown.length?prevShown.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No previous games</div>'}
-      ${g.previous.length>10?`<button class="irg-more" onclick="IRFU_SHOW_ALL_PREV=!IRFU_SHOW_ALL_PREV;irfuRenderGames()">${IRFU_SHOW_ALL_PREV?'Show fewer':`Show all ${g.previous.length}`}</button>`:''}
+      <div class="irp-card-hdr">📋 Previous Games <span class="irp-count">${g.previous.length} total</span><span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Latest first</span></div>
+      ${irfuRoleTally(g.previous)}
+      <div class="irg-list">${g.previous.length?g.previous.map(irfuGameRowHTML).join(''):'<div class="irp-empty">No previous games</div>'}</div>
       <button class="irp-add" onclick="irfuAddGame('previous')">+ Add game</button>
     </div>`;
+  irfuSizeGameLists();
+}
+// Show 5 games, scroll for the rest
+window.addEventListener('resize',()=>{if(document.getElementById('irp-games'))irfuSizeGameLists();});
+function irfuSizeGameLists(){
+  requestAnimationFrame(()=>document.querySelectorAll('#irp-games .irg-list').forEach(l=>{
+    const rows=l.querySelectorAll('.irg-row');
+    l.style.maxHeight='';l.classList.remove('scrolls');
+    if(rows.length>5){
+      const fifth=rows[4];
+      l.style.maxHeight=(fifth.offsetTop-l.offsetTop+fifth.offsetHeight+2)+'px';
+      l.classList.add('scrolls');
+    }
+  }));
 }
 function irfuAddGame(src){
   const prof=irfuProf(IRFU_PROFILE_NAME);
   prof[src].push({id:irfuItemId(),text:'',role:'Referee',date:src==='upcoming'?'':'',done:false,priority:''});
   irfuSave();irfuRenderGames();
-  setTimeout(()=>{const rows=document.querySelectorAll('#irp-games .irp-txt');const empty=[...rows].find(i=>!i.value);if(empty)empty.focus();},30);
+  setTimeout(()=>{const rows=document.querySelectorAll('#irp-games .irp-txt');const empty=[...rows].find(i=>!i.value);if(empty){empty.scrollIntoView({block:'nearest'});empty.focus();}},60);
 }
 
 // ---- Development board (Current / Upcoming / Target) ----
@@ -2346,7 +2435,10 @@ function irfuAddNote(){
 function irfuToggleUnavail(iso){
   if(!irfuCanEdit())return;
   const prof=irfuProf(IRFU_PROFILE_NAME);
-  prof.unavail=prof.unavail.includes(iso)?prof.unavail.filter(d=>d!==iso):[...prof.unavail,iso];
+  const cur=irfuUnavailMap(IRFU_PROFILE_NAME);
+  prof.unavailOff=prof.unavailOff||[];
+  if(cur.has(iso)){prof.unavail=prof.unavail.filter(d=>d!==iso);if(!prof.unavailOff.includes(iso))prof.unavailOff.push(iso);}
+  else{prof.unavail=[...prof.unavail,iso];prof.unavailOff=prof.unavailOff.filter(d=>d!==iso);}
   irfuSave();irfuRenderCalendar();irfuRenderLoad();irfuAfterChange();
 }
 function irfuCalShift(n){
@@ -2357,11 +2449,11 @@ function irfuRenderCalendar(){
   const name=IRFU_PROFILE_NAME,el=document.getElementById('irfu-cal');if(!el)return;
   const prof=irfuProf(name),L=irfuLoadInfo(name),today=irfuToday();
   const byDay={};L.games.all.forEach(r=>{if(r.date)(byDay[r.date]=byDay[r.date]||[]).push(r);});
-  const unav=new Set(prof.unavail||[]);
+  const unavMap=L.unav,unav=new Set(unavMap.keys());
   const chip=r=>`<div class="irc-game ${irfuRoleCls(r.role)}" title="${irfuEsc(r.role+' — '+r.text)}">${r.role!=='Referee'?`<b>${r.role}</b> `:''}${irfuEsc(r.text.replace(/\s*[—–].*$/,''))}</div>`;
   const legend=`<div class="irc-legend">
     <span><i style="background:#1a6b3e"></i>Referee</span><span><i style="background:#2f5fb3"></i>AR</span>
-    <span><i style="background:#7a3fb0"></i>TMO</span><span><i style="background:#6b7a70"></i>No.4 / No.5</span>
+    <span><i style="background:#7a3fb0"></i>TMO</span><span><i style="background:#b0457a"></i>FPRO</span><span><i style="background:#6b7a70"></i>No.4 / No.5</span>
     <span><i style="background:#f0f7ff;border:1px solid #cfe0f5"></i>Free weekend</span>
     <span><i style="background:repeating-linear-gradient(45deg,#fdecea 0 3px,#fff 3px 6px);border:1px solid #f3c5c0"></i>Unavailable</span></div>`;
   const viewBtns=`<button class="irc-btn${IRFU_CAL_VIEW==='month'?' on':''}" onclick="IRFU_CAL_VIEW='month';irfuRenderCalendar()">Month</button>
@@ -2379,9 +2471,9 @@ function irfuRenderCalendar(){
         const un=[...Array(7)].some((_,i)=>unav.has(irfuAddDays(wk,i)));
         const past=irfuAddDays(wk,6)<today;
         if(past){gs.length?worked++:free++;}
-        const col=gs.length?({'Referee':'#1a6b3e','TMO':'#7a3fb0','AR1':'#2f5fb3','AR2':'#2f5fb3'}[gs[0].role]||'#6b7a70'):un?'#e8a39c':'#dfe7e1';
+        const col=gs.length?({'Referee':'#1a6b3e','TMO':'#7a3fb0','FPRO':'#b0457a','AR1':'#2f5fb3','AR2':'#2f5fb3'}[gs[0].role]||'#6b7a70'):un?'#e8a39c':'#dfe7e1';
         rows+=`<div class="irc-wk"${wk===irfuWeekKey(today)?' style="font-weight:700"':''}><span class="irc-wk-d">Sat ${satD.getDate()}</span><span class="irc-wk-s" style="background:${col}"></span>
-          <span class="irc-wk-t" title="${irfuEsc(gs.map(g=>g.role+': '+g.text).join(' | '))}">${gs.length?irfuEsc(gs.map(g=>(g.role!=='Referee'?g.role+' · ':'')+g.text.replace(/\s*[—–].*$/,'')).join(' | ')):un?'<span style="color:var(--red)">Unavailable</span>':'<span style="color:var(--txt-faint)">Free</span>'}</span></div>`;
+          <span class="irc-wk-t" title="${irfuEsc(gs.map(g=>g.role+': '+g.text).join(' | '))}">${gs.length?irfuEsc(gs.map(g=>(g.role!=='Referee'?g.role+' · ':'')+g.text.replace(/\s*[—–].*$/,'')).join(' | ')):un?`<span style="color:var(--red)">${[...Array(7)].some((_,i)=>unavMap.get(irfuAddDays(wk,i))==='INJ')?'Injured':'Unavailable'}</span>`:'<span style="color:var(--txt-faint)">Free</span>'}</span></div>`;
         wk=irfuAddDays(wk,7);
       }
       html+=`<div class="irc-month"><h4>${md.toLocaleDateString('en-IE',{month:'long',year:'numeric'})}</h4>${rows}</div>`;
@@ -2403,10 +2495,10 @@ function irfuRenderCalendar(){
       const freeWk=wkend&&!wkGames.length&&!unav.has(iso);
       cells+=`<div class="irc-day${wkend?' wkend':''}${inM?'':' out'}${iso===today?' today':''}${unav.has(iso)?' unav':''}${freeWk&&inM?' free-wkend':''}"
         onclick="irfuToggleUnavail('${iso}')" title="${irfuCanEdit()?'Click to mark unavailable / available':''}">
-        <div class="irc-dnum"><span>${dd.getDate()}</span>${unav.has(iso)?'<span class="irc-unav-lbl">N/A</span>':''}</div>${gs.map(chip).join('')}</div>`;
+        <div class="irc-dnum"><span>${dd.getDate()}</span>${unav.has(iso)?(unavMap.get(iso)==='INJ'?'<span class="irc-unav-lbl inj">INJ</span>':'<span class="irc-unav-lbl">N/A</span>'):''}</div>${gs.map(chip).join('')}</div>`;
     }
     const sat=irfuParseISO(irfuAddDays(d,5));
-    if(sat.getMonth()===m-1){wkGames.length?wkWorked++:wkFree++;}
+    if(sat.getMonth()===m-1){const wkUn=[4,5,6].some(i=>unav.has(irfuAddDays(d,i)));wkGames.length?wkWorked++:wkUn?0:wkFree++;}
     d=irfuAddDays(d,7);
   }
   el.innerHTML=`<div class="irc-bar">
@@ -2417,7 +2509,291 @@ function irfuRenderCalendar(){
       <span style="flex:1"></span>${viewBtns}</div>
     <div class="irc-sum"><div><b>${mGames}</b>games this month</div><div><b>${wkWorked}</b>weekends with a game</div><div><b>${wkFree}</b>free weekends</div><div><b>${L.peak}</b>consecutive weeks now</div></div>
     <div class="irc-grid">${['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(x=>`<div class="irc-dow">${x}</div>`).join('')}${cells}</div>
-    ${legend}<div class="irc-hint">Click any day to mark the referee unavailable (holiday, work, injury). Games come from Upcoming / Previous Games and Opta.</div>`;
+    ${legend}<div class="irc-hint">Click any day to mark the referee unavailable (holiday, work, injury). Games come from the AIL matrix, Upcoming / Previous Games and Opta.</div>`;
+}
+
+// ===================== AIL MATRIX IMPORT =====================
+const IRFU_MONTHS={jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
+const IRFU_DOW={mon:-5,tue:-4,tues:-4,wed:-3,thu:-2,thur:-2,thurs:-2,fri:-1,sat:0,sun:1};
+const IRFU_COMP_RE=new RegExp('^('+[
+  "URC SA","URC","EPCR R\\d+","EPCR","Challenge Cup R\\d+","Champions Cup R\\d+",
+  "Men'?s Nations Cup","Nations Champ(?:ionship)?","Nations Cup","A Interpro","Pre-? ?Season",
+  "Wom[e']?n'?s Interpro Final","Wom[e']?n'?s Interpro","Wom[e']?n'?s Global XV","WXV Global Series","SH Tests",
+  "Jun(?:ior)? Cup","WAIL","Bateman Cup (?:SF|Final)","Bateman Cup","Celtic Challenge","Club Int",
+  "U\\d\\ds?(?: [A-Za-z']+){0,3}?(?= (?:- )?(?:Munster|Leinster|Ulster|Connacht)\\b)"
+].join('|')+')\\s*[-:]?\\s*','i');
+const IRFU_ROLE_TOKENS=/\b(?:TMO|FPRO)(?:\s+(?:Hub|On Site|Op))?\b|\bNo\.?\s?[45]\b|\bAR\s?[12]\b|\bReferee\b|\bRef\b/gi;
+
+function irfuMxNorm(s){return String(s||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z]/g,'');}
+// "31/1/2 Aug" → Saturday ISO, keeping months in order across the season
+function irfuMxWeekends(headers,startYear){
+  let prevAbs=-1;
+  return headers.map(h=>{
+    const m=String(h||'').trim().match(/^([\d\s\/]+?)\s*([A-Za-z]{3,})/);
+    if(!m)return null;
+    const mon=IRFU_MONTHS[m[2].slice(0,3).toLowerCase()];if(mon===undefined)return null;
+    const nums=m[1].split('/').map(x=>parseInt(x)).filter(n=>!isNaN(n));if(!nums.length)return null;
+    let sun=nums[nums.length-1];
+    if(sun>31&&nums.length>=2)sun=nums[nums.length-2]+1;
+    let abs=startYear*12+mon;while(abs<=prevAbs-6)abs+=12;prevAbs=abs;
+    const d=new Date(Math.floor(abs/12),abs%12,sun);d.setDate(d.getDate()-1);
+    return irfuISO(d);
+  });
+}
+function irfuMxRole(s){
+  if(/\bFPRO\b/i.test(s))return'FPRO';
+  if(/\bTMO\b/i.test(s))return'TMO';
+  if(/\bNo\.?\s?4\b/i.test(s))return'No.4';
+  if(/\bNo\.?\s?5\b/i.test(s))return'No.5';
+  if(/\bAR\s?1\b/i.test(s))return'AR1';
+  if(/\bAR\s?2\b/i.test(s))return'AR2';
+  return'Referee';
+}
+// Explicit day inside the cell (e.g. "(12/08)", "Wed 14/10/26", "(26th)", "Sat 7's") → ISO, if it sits in that weekend's week
+function irfuMxDay(s,sat){
+  const satD=irfuParseISO(sat);
+  const near=d=>{const diff=Math.round((d-satD)/864e5);return diff>=-6&&diff<=2;};
+  let m=s.match(/\b(\d{1,2})\/(\d{1,2})(?:\/\d{2,4})?\b/);
+  if(m){const dd=+m[1],mm=+m[2]-1;for(const y of[satD.getFullYear(),satD.getFullYear()-1,satD.getFullYear()+1]){const d=new Date(y,mm,dd);if(d.getMonth()===mm&&near(d))return{iso:irfuISO(d),tok:m[0]};}}
+  m=s.match(/\b(\d{1,2})(?:st|nd|rd|th)\b/i);
+  if(m){for(let i=-6;i<=2;i++){const d=new Date(satD);d.setDate(d.getDate()+i);if(d.getDate()===+m[1])return{iso:irfuISO(d),tok:null};}}
+  m=s.match(/\b(Mon|Tues?|Wed|Thu(?:rs?)?|Fri|Sat|Sun)(?:day)?\b/i);
+  if(m){const off=IRFU_DOW[m[1].toLowerCase()];if(off!==undefined)return{iso:irfuAddDays(sat,off),tok:null};}
+  return null;
+}
+function irfuMxClean(seg){
+  let s=seg.replace(IRFU_ROLE_TOKENS,' ').replace(/\b(?:Hub|On Site)\b/gi,' ')
+    .replace(/\(\s*(?:\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\d{1,2}(?:st|nd|rd|th)|Sun|Sat|Fri)\s*\)/gi,' ')
+    .replace(/\b(?:Mon|Tues?|Wed|Thu(?:rs?)?|Fri|Sat|Sun)\s+\d{1,2}\/\d{1,2}(?:\/\d{2,4})?\b/gi,' ')
+    .replace(/(?<!-)\b\d{1,2}(?:st|nd|rd|th)\s+(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\b/gi,' ')
+    .replace(/\bPre-?\s*Season\b/i,'Pre-Season')
+    .replace(/\s+/g,' ').replace(/^[\s\-–:]+|[\s\-–:,]+$/g,'').replace(/\s+-\s*$/,'');
+  s=s.replace(/\s+V\s+/g,' v ');
+  let comp='';
+  const ail=s.match(/^(1A|1B|2A|2B|2C)\b\s*[-:]?\s*/i);
+  if(ail){comp='AIL '+ail[1].toUpperCase();s=s.slice(ail[0].length);}
+  else{const c=s.match(IRFU_COMP_RE);if(c&&c[0].length<s.length){comp=c[1].trim();s=s.slice(c[0].length);}}
+  s=s.replace(/^[\s\-–:]+|[\s\-–:,]+$/g,'');
+  if(comp&&!/\sv\s/i.test(s)&&/\s-\s/.test(s))s=s.replace(/\s-\s/,' v ');
+  return comp?`${comp}: ${s}`:s;
+}
+// One matrix cell → appointments + status (N/A / INJ)
+function irfuMxParseCell(text,sat){
+  const raw=String(text??'').replace(/\s+/g,' ').trim();
+  if(!raw||raw==='0'||raw==='-')return{appts:[],status:null};
+  const st=raw.match(/^(N\s?\/\s?A|INJ(?:URED)?|Unavailable)\b(.*)$/i);
+  if(st&&!/\sv\s/i.test(raw)){
+    const status=/^inj/i.test(st[1])?'INJ':'N/A',rest=st[2].toLowerCase();
+    const days=/sun/.test(rest)?[1]:/sat/.test(rest)?[0]:/fri/.test(rest)?[-1]:[-1,0,1];
+    return{appts:[],status,days:days.map(o=>irfuAddDays(sat,o))};
+  }
+  // Split into separate appointments: "/" (not dates like 29/09 or 3/4), "," "+" "&"
+  let segs=raw.replace(/(\D)\s*\/|\/\s*(\D)/g,(m,a,b)=>(a!==undefined?a:'')+'|'+(b!==undefined?b:''))
+    .split(/\||,|\s\+\s/).map(s=>s.trim()).filter(Boolean);
+  // "AR1 - Connacht v Zebre Ref 1A - Old Wesley v Young Munster" → two
+  const out=[];
+  segs.forEach(s=>{
+    while(true){
+      const vs=[...s.matchAll(/\sv\s/gi)];if(vs.length<2){out.push(s);break;}
+      const between=s.slice(vs[0].index+3,vs[1].index);
+      const toks=[...between.matchAll(/\s(Ref|AR\s?[12]|No\.?\s?[45])\b/gi)];
+      if(!toks.length){out.push(s);break;}
+      const cut=vs[0].index+3+toks[toks.length-1].index;
+      out.push(s.slice(0,cut).trim());s=s.slice(cut).trim();
+    }
+  });
+  const appts=[];let lastComp='';
+  out.forEach(seg=>{
+    if(/training|\bTS\b|session|\bcamp\b|selection|^n\s?\/\s?a$|^inj/i.test(seg))return;
+    let text=irfuMxClean(seg);
+    if(!text||text.length<3||!/[a-z]{3}/i.test(text))return;
+    const cm=text.match(/^([^:]+):/);
+    if(cm)lastComp=cm[1];else if(lastComp&&/^3\/4\b/.test(text))text=`${lastComp}: ${text}`;
+    const day=irfuMxDay(seg,sat);
+    appts.push({date:day?day.iso:sat,role:irfuMxRole(seg),text,raw:seg});
+  });
+  return{appts,status:null};
+}
+// Workbook (SheetJS) → {refs:[{key,label,club,appts,unavail}], weeks, lastWeek}
+function irfuMxParseWorkbook(wb,fileName){
+  const names=wb.SheetNames;
+  const pick=names.find(n=>/full\s*panel/i.test(n))||names.slice().sort((a,b)=>{
+    const r=n=>XLSX.utils.sheet_to_json(wb.Sheets[n],{header:1,blankrows:false}).length;return r(b)-r(a);})[0];
+  const rows=XLSX.utils.sheet_to_json(wb.Sheets[pick],{header:1,defval:'',raw:false,blankrows:true});
+  const hr=rows.findIndex(r=>String(r[0]).trim().toLowerCase()==='referee');
+  if(hr<0)throw new Error(`Couldn't find the "Referee" header row on the "${pick}" tab.`);
+  const hdr=rows[hr];
+  const clubCol=hdr.findIndex(h=>String(h).trim().toLowerCase()==='club');
+  const ym=String(fileName||'').match(/(20\d\d)\D{0,3}(20\d\d)/);
+  const now=new Date();
+  const startYear=ym?+ym[1]:(now.getMonth()>=6?now.getFullYear():now.getFullYear()-1);
+  const sats=irfuMxWeekends(hdr,startYear);
+  const refs=[];let lastWeek=null;const perWeek={};
+  for(let i=hr+1;i<rows.length;i++){
+    const r=rows[i],label=String(r[0]||'').trim();
+    if(!label||/^referee$/i.test(label))continue;
+    const club=clubCol>=0?String(r[clubCol]||'').trim():'';
+    const ref={label,club:/^(none|n\/a|-|0)?$/i.test(club)?'':club,appts:[],unavail:[]};
+    sats.forEach((sat,c)=>{
+      if(!sat||c===0||c===clubCol)return;
+      const v=String(r[c]??'').trim();if(!v||v==='0')return;
+      const p=irfuMxParseCell(v,sat);
+      if(p.appts.length||p.status){if(!lastWeek||sat>lastWeek)lastWeek=sat;perWeek[sat]=(perWeek[sat]||0)+1;}
+      p.appts.forEach(a=>ref.appts.push(a));
+      if(p.status)p.days.forEach(d=>ref.unavail.push({d,why:p.status}));
+    });
+    refs.push(ref);
+  }
+  const busy=Object.keys(perWeek).filter(k=>perWeek[k]>=5).sort();
+  return{sheet:pick,startYear,refs,lastWeek,filledTo:busy.length?irfuAddDays(busy[busy.length-1],1):lastWeek};
+}
+// "MacNeice J" / "Lyons E" / "Bennett" → board name
+function irfuMxMatchName(label,boardNames){
+  const alias=((IRFU_STATE&&IRFU_STATE.matrixAliases)||{})[label];
+  if(alias&&alias!=='__skip')return alias;
+  const m=label.trim().match(/^(.*?)(?:\s+([A-Z])\.?)?$/);
+  const sur=irfuMxNorm(m[1]),ini=(m[2]||'').toLowerCase();
+  const hits=boardNames.filter(n=>{
+    const p=n.trim().split(/\s+/);
+    return irfuMxNorm(p[p.length-1])===sur&&(!ini||irfuMxNorm(p[0])[0]===ini);
+  });
+  return hits.length===1?hits[0]:(alias||null);
+}
+
+// ---- Shared matrix store (one upload, everyone sees it) ----
+let IRFU_MATRIX=null,IRFU_MX_PENDING=null;
+async function irfuLoadMatrix(){
+  try{const d=await FIRESTORE.doc('irfu_data/matrix').get();IRFU_MATRIX=d.exists?d.data():null;}catch(e){IRFU_MATRIX=null;}
+}
+function irfuMatrixFor(name){return((IRFU_MATRIX&&IRFU_MATRIX.refs)||{})[name]||null;}
+// Unavailable days: matrix N/A / INJ plus days marked by hand (minus matrix days cleared by hand)
+function irfuUnavailMap(name){
+  const prof=(IRFU_PROFILES||{})[name]||{},m=new Map(),off=new Set(prof.unavailOff||[]);
+  ((irfuMatrixFor(name)||{}).unavail||[]).forEach(u=>{if(!off.has(u.d))m.set(u.d,u.why);});
+  (prof.unavail||[]).forEach(d=>{if(!m.has(d))m.set(d,'N/A');});
+  return m;
+}
+function irfuMxLoadLib(){
+  if(window.XLSX)return Promise.resolve();
+  return new Promise((res,rej)=>{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+    s.onload=res;s.onerror=()=>rej(new Error('Could not load the spreadsheet reader — check your internet connection.'));
+    document.head.appendChild(s);
+  });
+}
+async function irfuHandleMatrixUpload(input){
+  const file=input.files&&input.files[0];input.value='';if(!file)return;
+  if(!irfuCanUploadMatrix()){alert('Only '+((IRFU_STATE.matrixOwner||{}).name||'the matrix owner')+' can upload the AIL Matrix.');return;}
+  try{
+    toast('Reading matrix…');
+    await irfuMxLoadLib();
+    const wb=XLSX.read(await file.arrayBuffer(),{type:'array'});
+    const res=irfuMxParseWorkbook(wb,file.name);
+    if(!res.refs.length)throw new Error('No referee rows found.');
+    res.fileName=file.name;
+    IRFU_MX_PENDING=res;
+    irfuMxShowReview();
+  }catch(e){alert('Could not import the matrix:\n'+(e.message||e));}
+}
+// Only one person uploads the matrix: the first admin to upload becomes the owner
+function irfuCanUploadMatrix(){
+  if(!SESSION||SESSION.type!=='admin')return false;
+  const o=IRFU_STATE&&IRFU_STATE.matrixOwner;
+  return!o||o.uid===SESSION.uid;
+}
+function irfuMxBoardNames(){return[...new Set([...IRFU_CATS.flatMap(c=>IRFU_STATE[c.id]||[]),...(IRFU_STATE.pool||[])])].sort((a,b)=>a.localeCompare(b));}
+function irfuMxRoleSummary(appts){
+  const c={};appts.forEach(a=>{const k=/^AR/.test(a.role)?'AR':a.role;c[k]=(c[k]||0)+1;});
+  return['Referee','AR','No.4','No.5','TMO','FPRO'].filter(k=>c[k]).map(k=>`${k==='Referee'?'Ref':k} ${c[k]}`).join(' · ');
+}
+function irfuMxShowReview(){
+  const res=IRFU_MX_PENDING,board=irfuMxBoardNames();
+  res.refs.forEach(r=>{r.match=irfuMxMatchName(r.label,board);});
+  const matched=res.refs.filter(r=>r.match&&r.match!=='__skip'),unmatched=res.refs.filter(r=>!r.match||r.match==='__skip');
+  const nAppts=matched.reduce((s,r)=>s+r.appts.length,0);
+  const nWk=matched.reduce((s,r)=>s+new Set(r.unavail.map(u=>irfuWeekKey(u.d))).size,0);
+  const nClubs=matched.filter(r=>r.club&&!irfuBio(r.match).club).length;
+  const opts=`<option value="__skip">Skip</option><option value="__new">Add as new referee…</option>`+board.map(n=>`<option value="${irfuEsc(n)}">${irfuEsc(n)}</option>`).join('');
+  const ex=document.getElementById('irfu-mx');if(ex)ex.remove();
+  const ov=document.createElement('div');ov.id='irfu-mx';ov.className='irp-overlay';
+  ov.innerHTML=`<div class="irp mx-modal" onclick="event.stopPropagation()">
+    <div class="irp-hdr" style="padding-bottom:12px"><div class="irp-hdr-top"><div class="irp-hdr-name">Import AIL Matrix</div>
+      <div class="irp-hdr-meta"><span class="irp-pill">${irfuEsc(res.fileName)}</span><span class="irp-pill">Tab: ${irfuEsc(res.sheet)}</span></div>
+      <button class="irp-close" onclick="document.getElementById('irfu-mx').remove()">✕</button></div></div>
+    <div class="irp-body">
+      <div class="irc-sum">
+        <div><b>${matched.length}</b>referees matched</div><div><b>${nAppts}</b>appointments</div>
+        <div><b>${nWk}</b>N/A or injured weekends</div><div><b>${nClubs}</b>clubs to fill in</div>
+        <div><b style="font-size:14px">${res.filledTo?irfuFmtDate(res.filledTo,{day:'numeric',month:'short'}):'—'}</b>filled up to</div>
+      </div>
+      ${unmatched.length?`<div class="irp-card" style="margin-bottom:14px">
+        <div class="irp-card-hdr">⚠️ Not on the depth chart <span class="irp-count">${unmatched.length}</span><span class="sp"></span><span style="text-transform:none;letter-spacing:0;font-weight:500">Choose who each row is, add them, or skip — remembered for next time</span></div>
+        ${unmatched.map((r,i)=>`<div class="mx-un">
+          <div class="mx-un-l"><b>${irfuEsc(r.label)}${r.match==='__skip'?' <span style="display:inline;font-weight:400">(skipped last time)</span>':''}</b><span>${irfuEsc(r.club||'')}${r.appts.length?` · ${r.appts.length} appts (${irfuMxRoleSummary(r.appts)})`:' · no appointments'}</span></div>
+          <select class="irfu-filter-sel" data-i="${res.refs.indexOf(r)}" onchange="this.nextElementSibling.style.display=this.value==='__new'?'':'none'">${opts}</select>
+          <input class="irp-in mx-new" style="display:none;max-width:200px" placeholder="Full name, e.g. John ${irfuEsc(r.label.split(' ')[0])}">
+        </div>`).join('')}
+      </div>`:''}
+      <div class="irp-card">
+        <div class="irp-card-hdr">✅ Matched referees <span class="irp-count">${matched.length}</span></div>
+        <div class="mx-grid">${matched.map(r=>`<details class="mx-ref"><summary><b>${irfuEsc(r.match)}</b>
+            <span>${r.appts.length?irfuMxRoleSummary(r.appts):'no appointments'}${r.unavail.length?` · ${new Set(r.unavail.map(u=>irfuWeekKey(u.d))).size} N/A`:''}${r.club?` · ${irfuEsc(r.club)}`:''}</span></summary>
+            ${r.appts.map(a=>`<div class="mx-a"><span>${irfuFmtDate(a.date,{day:'numeric',month:'short'})}</span><i class="irg-role ${irfuRoleCls(a.role)}">${a.role}</i>${irfuEsc(a.text)}</div>`).join('')||'<div class="irp-empty">No appointments</div>'}
+          </details>`).join('')}</div>
+      </div>
+      <div class="mx-foot">
+        <span>Replaces any previous matrix upload. Your own notes and games are not touched, and clubs are only filled where blank.</span>
+        <button class="irc-btn" onclick="document.getElementById('irfu-mx').remove()">Cancel</button>
+        <button class="irc-btn on" onclick="irfuMxApply()">Import</button>
+      </div>
+    </div></div>`;
+  ov.onclick=()=>ov.remove();
+  document.body.appendChild(ov);
+}
+async function irfuMxApply(){
+  const res=IRFU_MX_PENDING;if(!res)return;
+  IRFU_STATE.matrixAliases=IRFU_STATE.matrixAliases||{};
+  let bad=false;
+  document.querySelectorAll('#irfu-mx select[data-i]').forEach(sel=>{
+    const r=res.refs[+sel.dataset.i];
+    if(sel.value==='__new'){
+      const nm=sel.nextElementSibling.value.trim();
+      if(!nm){bad=true;sel.nextElementSibling.style.borderColor='var(--red)';return;}
+      const all=irfuMxBoardNames();
+      if(!all.includes(nm))IRFU_STATE.pool=[...(IRFU_STATE.pool||[]),nm];
+      r.match=nm;
+    }else r.match=sel.value;
+    IRFU_STATE.matrixAliases[r.label]=r.match;
+  });
+  if(bad){toast('Type a full name for each new referee','err');return;}
+  const refs={};
+  res.refs.forEach(r=>{
+    if(!r.match||r.match==='__skip')return;
+    const cur=refs[r.match]||{appts:[],unavail:[]};
+    cur.appts.push(...r.appts.map(a=>({date:a.date,role:a.role,text:a.text})));
+    cur.unavail.push(...r.unavail);
+    refs[r.match]=cur;
+  });
+  const doc={refs,fileName:res.fileName,filledTo:res.filledTo||null,importedAt:new Date().toISOString(),importedBy:SESSION?.name||''};
+  try{await FIRESTORE.doc('irfu_data/matrix').set(doc);}
+  catch(e){alert('Could not save the matrix to the database (permissions?).\n'+(e.message||e));return;}
+  IRFU_MATRIX=doc;
+  if(!IRFU_STATE.matrixOwner)IRFU_STATE.matrixOwner={uid:SESSION.uid,name:SESSION.name||SESSION.email||''};
+  // Clubs: shared profile, only where blank; doesn't count as a check-in
+  let clubs=0;
+  res.refs.forEach(r=>{
+    if(!r.match||r.match==='__skip'||!r.club||irfuBio(r.match).club)return;
+    const k=irfuBioKey(r.match);
+    IRFU_BIOS[k]={...(IRFU_BIOS[k]||{}),name:r.match,club:r.club};
+    FIRESTORE.doc(`irfu_bio/${k}`).set({name:r.match,club:r.club},{merge:true}).catch(()=>{});
+    clubs++;
+  });
+  irfuSave(false);
+  IRFU_MX_PENDING=null;
+  document.getElementById('irfu-mx')?.remove();
+  renderIRFU();
+  toast(`Matrix imported — ${Object.keys(refs).length} referees, ${Object.values(refs).reduce((s,r)=>s+r.appts.length,0)} appointments${clubs?`, ${clubs} clubs filled`:''}`);
 }
 
 let SEL_REFSTATS_T=null;
