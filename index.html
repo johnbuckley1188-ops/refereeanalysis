@@ -1185,8 +1185,8 @@ const BD_TEAM_COLS=[
   {k:'jackalAtt',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
   {k:'counterRuck',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
   {k:'noInt',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
-  {k:'jaPer',l:'Jackal Att every',fmt:'every',tip:'One jackal attempt every X defensive rucks (lower = more often)'},
-  {k:'jPer',l:'Jackal every',fmt:'every',tip:'One jackal won every X defensive rucks (lower = more often)'},
+  {k:'jaPer',l:'Def Rucks per Jackal Att',fmt:'every',tip:'Defensive rucks per jackal attempt (lower = more often)'},
+  {k:'jPer',l:'Def Rucks per Jackal',fmt:'every',tip:'Defensive rucks per jackal won (lower = more often)'},
 ];
 const BD_PLAYER_COLS=[
   {k:'games',l:'Games',fmt:'n'},
@@ -1195,8 +1195,8 @@ const BD_PLAYER_COLS=[
   {k:'b1',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
   {k:'b2',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
   {k:'b3',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
-  {k:'jaPer',l:'Jackal Att every',fmt:'every',tip:'One jackal attempt every X rucks attended (lower = more often)'},
-  {k:'jPer',l:'Jackal every',fmt:'every',tip:'One jackal won every X rucks attended (lower = more often)'},
+  {k:'jaPer',l:'Rucks per Jackal Att',fmt:'every',tip:'Rucks attended per jackal attempt (lower = more often)'},
+  {k:'jPer',l:'Rucks per Jackal',fmt:'every',tip:'Rucks attended per jackal won (lower = more often)'},
 ];
 function bdBaseMatches(){
   // like Rankings: competition / referee / date filters apply; team filter highlights instead of hiding
@@ -1221,7 +1221,7 @@ function bdTable(rows,cols,view,nameCol,focusIds){
   const v=x=>x===Infinity?(asc?1e12:-1e12):x;
   rows.sort((a,b)=>(asc?(v(a[key])-v(b[key])):(v(b[key])-v(a[key])))||(b.defRucks||b.arr||0)-(a.defRucks||a.arr||0));
   const max={},min={};cols.forEach(c=>{const vals=rows.map(r=>r[c.k]).filter(x=>isFinite(x)&&x>0);max[c.k]=Math.max(...vals,0)||1;min[c.k]=vals.length?Math.min(...vals):1;});
-  const val=(r,c)=>c.fmt==='every'?(isFinite(r[c.k])?`1 in ${r[c.k].toFixed(1)}`:'—'):(r[c.k]||0);
+  const val=(r,c)=>c.fmt==='every'?(isFinite(r[c.k])?r[c.k].toFixed(1):'—'):(r[c.k]||0);
   const hdr=`<tr><th class="bd-rk">#</th>${nameCol.map(n=>`<th class="bd-name">${n}</th>`).join('')}${cols.map(c=>`<th class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}" title="${c.tip||''}" onclick="bdSort('${view}','${c.k}')">${c.l}${key===c.k?(asc?' ▲':' ▼'):''}</th>`).join('')}</tr>`;
   const grp=`<tr class="bd-grp"><th></th>${nameCol.map(()=>'<th></th>').join('')}${cols.map((c,i)=>c.grp?(i===0||!cols[i-1].grp?`<th colspan="${cols.filter(x=>x.grp).length}" class="bd-bep-h">Back-end pressure</th>`:''):'<th></th>').join('')}</tr>`;
   const body=rows.map((r,i)=>{
@@ -1230,7 +1230,7 @@ function bdTable(rows,cols,view,nameCol,focusIds){
     return`<tr class="${hl?'bd-hl':''}${rk===10?' bd-10':''}"><td class="bd-rk"><span class="rank-badge ${rc}">${rk}</span></td>
       ${r.cells.map(c=>`<td class="bd-name">${c}</td>`).join('')}
       ${cols.map(c=>{const pct=c.fmt==='every'?(isFinite(r[c.k])?Math.round(min[c.k]/r[c.k]*100):0):Math.round(((r[c.k]||0)/max[c.k])*100);
-        return`<td class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}">${c.fmt==='every'?`<div class="bd-rate"><span>${val(r,c)}</span><i style="width:${pct}%"></i></div>`:val(r,c)}</td>`;}).join('')}</tr>`;
+        return`<td class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}">${val(r,c)}</td>`;}).join('')}</tr>`;
   }).join('');
   return`<div class="bd-wrap" data-view="${view}"><table class="bd-table"><thead>${grp}${hdr}</thead><tbody>${body||`<tr><td colspan="${cols.length+1+nameCol.length}" class="no-data">No data</td></tr>`}</tbody></table></div>`;
 }
@@ -1276,7 +1276,7 @@ function renderBreakdown(){
         <select onchange="BD_MIN_RUCKS=+this.value;renderBreakdown()">${[1,3,5,10,15,20,30].map(n=>`<option value="${n}"${n===BD_MIN_RUCKS?' selected':''}>${n}+</option>`).join('')}</select></div>
       <div class="ctrl-group"><div class="ctrl-lbl">Search player / team</div>
         <input id="bd-search" type="text" class="flt-date" placeholder="Type a name…" value="${irfuEsc(BD_SEARCH)}" oninput="BD_SEARCH=this.value;renderBreakdown()" style="min-width:200px"></div>`:''}
-      <div class="ctrl-group" style="margin-left:auto;font-size:11px;color:var(--txt-faint);max-width:420px">Click a column to sort. “1 in 29.9” = one every 29.9 rucks — lower is more often. ${BD_VIEW==='player'?'Players are ranked on rucks they arrived at in defence; use the team filter at the top to show one team.':'Team filter at the top highlights that team.'}</div>
+      <div class="ctrl-group" style="margin-left:auto;font-size:11px;color:var(--txt-faint);max-width:420px">Click a column to sort. Rucks per jackal: 29.9 = one jackal every 29.9 rucks — lower is more often. ${BD_VIEW==='player'?'Players are ranked on rucks they arrived at in defence; use the team filter at the top to show one team.':'Team filter at the top highlights that team.'}</div>
     </div>
     ${content}`;
   // show 10 rows then scroll
