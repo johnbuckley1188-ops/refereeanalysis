@@ -149,6 +149,12 @@ select:focus{border-color:var(--green)}
 .gfbar .ctrl-lbl{font-size:9px}
 .gfbar select,.gfbar .flt-date{padding:4px 8px;font-size:11px;height:27px}
 .gfbar .gf-clear{padding:4px 10px;border-radius:7px;font-size:11px;font-weight:700;color:var(--txt-dim);border:1px solid var(--border);background:var(--bg);cursor:pointer;white-space:nowrap;transition:all .12s;height:27px}
+.gf-cats{display:flex;border:1px solid var(--border);border-radius:7px;overflow:hidden;height:27px}
+.gf-cat{font-size:11px;font-weight:600;padding:0 10px;color:var(--txt-dim);background:var(--card);border-right:1px solid var(--border);white-space:nowrap}
+.gf-cat:last-child{border-right:none}
+.gf-cat span{font-size:9.5px;opacity:.6;margin-left:2px}
+.gf-cat:hover{background:var(--green-dim);color:var(--green)}
+.gf-cat.on{background:var(--green);color:#fff}
 .gfbar .gf-clear:hover{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 /* ==== MULTI-SELECT FILTER ==== */
 .ms-wrap{position:relative;display:inline-block}
@@ -202,9 +208,11 @@ select:focus{border-color:var(--green)}
 /* ==== DEFENSIVE RUCKS ==== */
 .bd-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:auto}
 .bd-table{width:100%;border-collapse:collapse;font-size:12px}
-.bd-table thead th{position:sticky;background:#fafbfa;z-index:1;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-dim);padding:7px 8px;white-space:nowrap;border-bottom:1px solid var(--border)}
-.bd-table thead tr.bd-grp th{top:0;padding:5px 8px 0;border-bottom:none;height:20px}
-.bd-table thead tr:not(.bd-grp) th{top:20px}
+.bd-table thead{position:sticky;top:0;z-index:2}
+.bd-table thead th{background:#fafbfa!important;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-dim);padding:7px 8px;white-space:nowrap;border-bottom:1px solid var(--border)}
+.bd-table thead tr.bd-grp th{padding:5px 8px 0;border-bottom:none;height:20px}
+.bd-table thead th.bd-bep{background:#f6f3f9!important}
+.bd-table thead tr:last-child th{box-shadow:0 1px 0 var(--border)}
 .bd-table th.bd-num{cursor:pointer;text-align:right}
 .bd-table th.bd-num:hover{color:var(--green)}
 .bd-table th.bd-on{color:var(--green)}
@@ -798,7 +806,16 @@ let OV_FILTERS={tour:'',team:'',ref:'',ha:'all',dateFrom:'',dateTo:'',sort:'date
 let RF_TIME_FROM=0,RF_TIME_TO=90,RF_TEAM_FILTER=null,RF_CARD_FILTER=null; // null=both/all
 let RANK_SHOW_TOTALS=false;
 let SEL_REFSTATS_SEARCH='';
-let GLOBAL_FILTERS={tours:[],teams:[],homeTeam:'',awayTeam:'',ref:'',dateFrom:'',dateTo:''};
+let GLOBAL_FILTERS={tours:[],teams:[],homeTeam:'',awayTeam:'',ref:'',dateFrom:'',dateTo:''},GF_CAT='';
+// Competition category from the Opta tournament ID: women's (any women's comp), men's international, else club
+const TID_INTL=new Set([1,3,114,209,210,214,216,217,218,219,221,238,251,252,254,255,256,258,259,260,266,269,276,282,315,316,334,359,365,366,820,830,873]);
+function tourCat(tid,name){
+  const n=String(name||TID_NAMES[+tid]||'');
+  if(/wom/i.test(n))return'women';
+  if(TID_INTL.has(+tid))return'intl';
+  return'club';
+}
+function catOK(m){return!GF_CAT||tourCat(m.tour,m.tourN)===GF_CAT;}
 let GF_MS_OPEN=null;
 let PITCH_HOVER_DATA={locs:[],W:200,H:280,PAD:10};
 let SEL_REF_MATCHES=new Set();
@@ -851,7 +868,7 @@ function refs(){const m={};MATCHES.forEach(x=>{if(!m[x.rid])m[x.rid]={id:x.rid,n
 function matchDocId(m){return`${m.tour}_${m.hid}_${m.aid}_${(m.date||'').replace(/\//g,'')}`;}
 
 function getFilteredMatches(){
-  const f=GLOBAL_FILTERS;let ms=[...MATCHES];
+  const f=GLOBAL_FILTERS;let ms=MATCHES.filter(catOK);
   if(f.tours&&f.tours.length)ms=ms.filter(m=>f.tours.some(t=>String(t)===String(m.tour)));
   if(f.teams&&f.teams.length)ms=ms.filter(m=>f.teams.includes(m.hid)||f.teams.includes(m.aid));
   if(f.homeTeam)ms=ms.filter(m=>m.hid===f.homeTeam);
@@ -893,6 +910,12 @@ function gfToggleTour(id,checked){
   if(foot)foot.style.display=arr.length?'':'none';
   renderCurrentTabOnly();
 }
+function gfSetCat(c){
+  GF_CAT=c;
+  // drop any selected tournaments that aren't in the new category
+  if(c)GLOBAL_FILTERS.tours=(GLOBAL_FILTERS.tours||[]).filter(t=>tourCat(t)===c);
+  renderGlobalFilters();renderCurrentTabOnly();
+}
 function gfClearTours(){GLOBAL_FILTERS.tours=[];renderGlobalFilters();renderCurrentTabOnly();}
 function gfToggleTeam(id,checked){
   const arr=GLOBAL_FILTERS.teams;
@@ -931,13 +954,13 @@ function renderGlobalFilters(){
   el.style.display='flex';
   const f=GLOBAL_FILTERS;
   const _TOUR_PIN={'AIL 1A':0,'AIL 1B':1,'AIL 2A':2,'URC':3};
-  const allTours=tours().map(t=>({id:t.id,c:t.c,n:TID_NAMES[+t.id]||t.tourN||String(t.id)})).sort((a,b)=>{
+  const allTours=tours().map(t=>({id:t.id,c:t.c,n:TID_NAMES[+t.id]||t.tourN||String(t.id)})).filter(t=>!GF_CAT||tourCat(t.id,t.n)===GF_CAT).sort((a,b)=>{
     const pa=_TOUR_PIN[a.n]??99,pb=_TOUR_PIN[b.n]??99;
     return pa!==pb?pa-pb:a.n.localeCompare(b.n);
   });
   const allTeams=Object.values(MATCHES.reduce((m,x)=>{if(x.hid)m[x.hid]={id:x.hid,n:x.hn||x.hid};if(x.aid)m[x.aid]={id:x.aid,n:x.an||x.aid};return m;},{})).filter(t=>t.id).sort((a,b)=>(a.n||'').localeCompare(b.n||''));
   const allRefs=refs().sort((a,b)=>a.n.localeCompare(b.n));
-  const hasFilter=(f.tours&&f.tours.length)||(f.teams&&f.teams.length)||f.homeTeam||f.awayTeam||f.ref||f.dateFrom||f.dateTo;
+  const hasFilter=GF_CAT||(f.tours&&f.tours.length)||(f.teams&&f.teams.length)||f.homeTeam||f.awayTeam||f.ref||f.dateFrom||f.dateTo;
   function mkMS(msId,items,selected,toggleFn,clearFn,placeholder){
     const btnTxt=selected.length?`${selected.length} selected`:placeholder;
     const opts=items.map(item=>{
@@ -949,7 +972,11 @@ function renderGlobalFilters(){
   }
   const refName=f.ref?(allRefs.find(r=>r.id===f.ref)?.n||''):'';
   const refDlOpts=allRefs.map(r=>`<option value="${r.n}">`).join('');
+  const catCount=c=>MATCHES.filter(m=>!c||tourCat(m.tour,m.tourN)===c).length;
+  const catBtn=(c,l)=>`<button class="gf-cat${GF_CAT===c?' on':''}" onclick="gfSetCat('${c}')">${l} <span>${catCount(c)}</span></button>`;
   el.innerHTML=`
+    <div class="ctrl-group"><div class="ctrl-lbl" style="font-size:9px">Category</div>
+      <div class="gf-cats">${catBtn('','All')}${catBtn('intl','International')}${catBtn('club','Club')}${catBtn('women',"Women's")}</div></div>
     <div class="ctrl-group"><div class="ctrl-lbl" style="font-size:9px">Tournaments</div>${mkMS('tours',allTours,f.tours||[],'gfToggleTour','gfClearTours','All Tournaments')}</div>
     <div class="ctrl-group"><div class="ctrl-lbl" style="font-size:9px">Teams</div>${mkMS('teams',allTeams,f.teams||[],'gfToggleTeam','gfClearTeams','Any Team')}</div>
     <div class="ctrl-group"><div class="ctrl-lbl" style="font-size:9px">Referee</div>
@@ -973,7 +1000,7 @@ function renderGlobalFilters(){
       <input type="date" class="flt-date" value="${ddmmToISO(f.dateFrom)}" onchange="GLOBAL_FILTERS.dateFrom=isoToDDMM(this.value);renderCurrentTab()"></div>
     <div class="ctrl-group"><div class="ctrl-lbl" style="font-size:9px">To Date</div>
       <input type="date" class="flt-date" value="${ddmmToISO(f.dateTo)}" onchange="GLOBAL_FILTERS.dateTo=isoToDDMM(this.value);renderCurrentTab()"></div>
-    ${hasFilter?`<button class="gf-clear" onclick="GLOBAL_FILTERS={tours:[],teams:[],homeTeam:'',awayTeam:'',ref:'',dateFrom:'',dateTo:''};document.getElementById('gf-ref-inp')&&(document.getElementById('gf-ref-inp').value='');renderCurrentTab()">✕ Clear</button>`:''}`;
+    ${hasFilter?`<button class="gf-clear" onclick="GLOBAL_FILTERS={tours:[],teams:[],homeTeam:'',awayTeam:'',ref:'',dateFrom:'',dateTo:''};GF_CAT='';document.getElementById('gf-ref-inp')&&(document.getElementById('gf-ref-inp').value='');renderCurrentTab()">✕ Clear</button>`:''}`;
 }
 function renderCurrentTab(){
   renderGlobalFilters();
@@ -1200,7 +1227,7 @@ const BD_PLAYER_COLS=[
 ];
 function bdBaseMatches(){
   // like Rankings: competition / referee / date filters apply; team filter highlights instead of hiding
-  const f=GLOBAL_FILTERS;let ms=[...MATCHES];
+  const f=GLOBAL_FILTERS;let ms=MATCHES.filter(catOK);
   if(f.tours&&f.tours.length)ms=ms.filter(m=>f.tours.some(t=>String(t)===String(m.tour)));
   if(f.homeTeam)ms=ms.filter(m=>m.hid===f.homeTeam);
   if(f.awayTeam)ms=ms.filter(m=>m.aid===f.awayTeam);
@@ -3222,7 +3249,7 @@ function renderRankings(){
   // Rankings always shows full league standings — ignore the team filter so every team's
   // full season stats are visible. The selected team (if any) is highlighted in each card.
   const f=GLOBAL_FILTERS;
-  let base=[...MATCHES];
+  let base=MATCHES.filter(catOK);
   if(f.tours&&f.tours.length)base=base.filter(m=>f.tours.some(t=>String(t)===String(m.tour)));
   if(f.homeTeam)base=base.filter(m=>m.hid===f.homeTeam);
   if(f.awayTeam)base=base.filter(m=>m.aid===f.awayTeam);
