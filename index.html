@@ -923,6 +923,7 @@ function renderCurrentTabOnly(){
   else if(TAB==='trends-tot')renderTRTot();
   else if(TAB==='referee')renderRF();
   else if(TAB==='refstats')renderRefStats();
+  else if(TAB==='breakdown')renderBreakdown();
 }
 function renderGlobalFilters(){
   const el=document.getElementById('gfbar');if(!el)return;
@@ -982,6 +983,7 @@ function renderCurrentTab(){
   else if(TAB==='trends-tot')renderTRTot();
   else if(TAB==='referee')renderRF();
   else if(TAB==='refstats')renderRefStats();
+  else if(TAB==='breakdown')renderBreakdown();
 }
 function toast(msg,type='ok'){
   const t=document.getElementById('toast');
@@ -1175,7 +1177,7 @@ function calcPlayers(m,roster){
   });
   return P;
 }
-let BD_VIEW='team',BD_SORT={team:'jPer',player:'jPer'},BD_MIN_RUCKS=5,BD_SEARCH='';
+let BD_VIEW='team',BD_SORT={team:'-jPer',player:'-jPer'},BD_MIN_RUCKS=5,BD_SEARCH='';
 const BD_TEAM_COLS=[
   {k:'games',l:'Games',fmt:'n'},
   {k:'defRucks',l:'Def Rucks',fmt:'n',tip:'Rucks the opposition had (rucks this team defended)'},
@@ -1183,8 +1185,8 @@ const BD_TEAM_COLS=[
   {k:'jackalAtt',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
   {k:'counterRuck',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
   {k:'noInt',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
-  {k:'jaPer',l:'Jackal Att / Def Ruck',fmt:'pct',tip:'Jackal attempts ÷ defensive rucks'},
-  {k:'jPer',l:'Jackals / Def Ruck',fmt:'pct',tip:'Jackals won ÷ defensive rucks'},
+  {k:'jaPer',l:'Jackal Att every',fmt:'every',tip:'One jackal attempt every X defensive rucks (lower = more often)'},
+  {k:'jPer',l:'Jackal every',fmt:'every',tip:'One jackal won every X defensive rucks (lower = more often)'},
 ];
 const BD_PLAYER_COLS=[
   {k:'games',l:'Games',fmt:'n'},
@@ -1193,27 +1195,33 @@ const BD_PLAYER_COLS=[
   {k:'b1',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
   {k:'b2',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
   {k:'b3',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
-  {k:'jaPer',l:'Jackal Att / Ruck',fmt:'pct',tip:'Jackal attempts ÷ rucks attended'},
-  {k:'jPer',l:'Jackals / Ruck',fmt:'pct',tip:'Jackals won ÷ rucks attended'},
+  {k:'jaPer',l:'Jackal Att every',fmt:'every',tip:'One jackal attempt every X rucks attended (lower = more often)'},
+  {k:'jPer',l:'Jackal every',fmt:'every',tip:'One jackal won every X rucks attended (lower = more often)'},
 ];
 function bdBaseMatches(){
   // like Rankings: competition / referee / date filters apply; team filter highlights instead of hiding
   const f=GLOBAL_FILTERS;let ms=[...MATCHES];
   if(f.tours&&f.tours.length)ms=ms.filter(m=>f.tours.some(t=>String(t)===String(m.tour)));
+  if(f.homeTeam)ms=ms.filter(m=>m.hid===f.homeTeam);
+  if(f.awayTeam)ms=ms.filter(m=>m.aid===f.awayTeam);
   if(f.ref)ms=ms.filter(m=>m.rid===f.ref);
   if(f.dateFrom){const d=ddmmToISO(f.dateFrom);ms=ms.filter(m=>ddmmToISO(m.date)>=d);}
   if(f.dateTo){const d=ddmmToISO(f.dateTo);ms=ms.filter(m=>ddmmToISO(m.date)<=d);}
   return ms;
 }
 function bdSort(view,k){
-  BD_SORT[view]=BD_SORT[view]===k?'-'+k:k;
+  // "every X rucks" columns: lower is better, so first click sorts ascending
+  const every=k==='jPer'||k==='jaPer',first=every?'-'+k:k,second=every?k:'-'+k;
+  BD_SORT[view]=BD_SORT[view]===first?second:first;
   renderBreakdown();
 }
 function bdTable(rows,cols,view,nameCol,focusIds){
   const sk=BD_SORT[view],asc=sk.startsWith('-'),key=sk.replace(/^-/,'');
-  rows.sort((a,b)=>asc?(a[key]-b[key]):(b[key]-a[key])||(b.defRucks||b.arr||0)-(a.defRucks||a.arr||0));
-  const max={};cols.forEach(c=>{max[c.k]=Math.max(...rows.map(r=>r[c.k]||0),0)||1;});
-  const val=(r,c)=>c.fmt==='pct'?(r[c.k]*100).toFixed(1)+'%':(r[c.k]||0);
+  // rates with no events (Infinity) always sit at the bottom
+  const v=x=>x===Infinity?(asc?1e12:-1e12):x;
+  rows.sort((a,b)=>(asc?(v(a[key])-v(b[key])):(v(b[key])-v(a[key])))||(b.defRucks||b.arr||0)-(a.defRucks||a.arr||0));
+  const max={},min={};cols.forEach(c=>{const vals=rows.map(r=>r[c.k]).filter(x=>isFinite(x)&&x>0);max[c.k]=Math.max(...vals,0)||1;min[c.k]=vals.length?Math.min(...vals):1;});
+  const val=(r,c)=>c.fmt==='every'?(isFinite(r[c.k])?`1 in ${r[c.k].toFixed(1)}`:'—'):(r[c.k]||0);
   const hdr=`<tr><th class="bd-rk">#</th>${nameCol.map(n=>`<th class="bd-name">${n}</th>`).join('')}${cols.map(c=>`<th class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}" title="${c.tip||''}" onclick="bdSort('${view}','${c.k}')">${c.l}${key===c.k?(asc?' ▲':' ▼'):''}</th>`).join('')}</tr>`;
   const grp=`<tr class="bd-grp"><th></th>${nameCol.map(()=>'<th></th>').join('')}${cols.map((c,i)=>c.grp?(i===0||!cols[i-1].grp?`<th colspan="${cols.filter(x=>x.grp).length}" class="bd-bep-h">Back-end pressure</th>`:''):'<th></th>').join('')}</tr>`;
   const body=rows.map((r,i)=>{
@@ -1221,8 +1229,8 @@ function bdTable(rows,cols,view,nameCol,focusIds){
     const rk=i+1,rc=rk===1?'rank-1':rk===2?'rank-2':rk===3?'rank-3':'';
     return`<tr class="${hl?'bd-hl':''}${rk===10?' bd-10':''}"><td class="bd-rk"><span class="rank-badge ${rc}">${rk}</span></td>
       ${r.cells.map(c=>`<td class="bd-name">${c}</td>`).join('')}
-      ${cols.map(c=>{const pct=Math.round(((r[c.k]||0)/max[c.k])*100);
-        return`<td class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}">${c.fmt==='pct'?`<div class="bd-rate"><span>${val(r,c)}</span><i style="width:${pct}%"></i></div>`:val(r,c)}</td>`;}).join('')}</tr>`;
+      ${cols.map(c=>{const pct=c.fmt==='every'?(isFinite(r[c.k])?Math.round(min[c.k]/r[c.k]*100):0):Math.round(((r[c.k]||0)/max[c.k])*100);
+        return`<td class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}">${c.fmt==='every'?`<div class="bd-rate"><span>${val(r,c)}</span><i style="width:${pct}%"></i></div>`:val(r,c)}</td>`;}).join('')}</tr>`;
   }).join('');
   return`<div class="bd-wrap" data-view="${view}"><table class="bd-table"><thead>${grp}${hdr}</thead><tbody>${body||`<tr><td colspan="${cols.length+1+nameCol.length}" class="no-data">No data</td></tr>`}</tbody></table></div>`;
 }
@@ -1240,7 +1248,7 @@ function renderBreakdown(){
       const t=T[tid]=T[tid]||{id:tid,n:tid===m.hid?m.hn:m.an,games:0,defRucks:0,jackal:0,jackalAtt:0,counterRuck:0,noInt:0};
       t.games++;t.defRucks+=s.defRucks||0;t.jackal+=s.jackal||0;t.jackalAtt+=s.jackalAtt||0;t.counterRuck+=s.counterRuck||0;t.noInt+=s.noInt||0;
     }));
-    const rows=Object.values(T).map(t=>({...t,jaPer:t.defRucks?t.jackalAtt/t.defRucks:0,jPer:t.defRucks?t.jackal/t.defRucks:0,cells:[irfuEsc(t.n)]}));
+    const rows=Object.values(T).map(t=>({...t,jaPer:t.jackalAtt?t.defRucks/t.jackalAtt:Infinity,jPer:t.jackal?t.defRucks/t.jackal:Infinity,cells:[irfuEsc(t.n)]}));
     content=bdTable(rows,BD_TEAM_COLS,'team',['Team'],focus);
   }else{
     const P={};
@@ -1253,7 +1261,7 @@ function renderBreakdown(){
     let rows=Object.values(P).filter(p=>p.arr>=BD_MIN_RUCKS||(q&&p.n.toLowerCase().includes(q)));
     if(focus.length)rows=rows.filter(p=>focus.includes(p.tid));
     if(q)rows=rows.filter(p=>p.n.toLowerCase().includes(q)||(p.tn||'').toLowerCase().includes(q));
-    rows=rows.map(p=>({...p,jaPer:p.arr?p.b1/p.arr:0,jPer:p.arr?p.j/p.arr:0,cells:[irfuEsc(p.n),`<span class="bd-team">${irfuEsc(p.tn||'')}</span>`]}));
+    rows=rows.map(p=>({...p,jaPer:p.b1?p.arr/p.b1:Infinity,jPer:p.j?p.arr/p.j:Infinity,cells:[irfuEsc(p.n),`<span class="bd-team">${irfuEsc(p.tn||'')}</span>`]}));
     content=bdTable(rows,BD_PLAYER_COLS,'player',['Player','Team'],null);
   }
   const missing=ms.length-withBd.length;
@@ -1268,7 +1276,7 @@ function renderBreakdown(){
         <select onchange="BD_MIN_RUCKS=+this.value;renderBreakdown()">${[1,3,5,10,15,20,30].map(n=>`<option value="${n}"${n===BD_MIN_RUCKS?' selected':''}>${n}+</option>`).join('')}</select></div>
       <div class="ctrl-group"><div class="ctrl-lbl">Search player / team</div>
         <input id="bd-search" type="text" class="flt-date" placeholder="Type a name…" value="${irfuEsc(BD_SEARCH)}" oninput="BD_SEARCH=this.value;renderBreakdown()" style="min-width:200px"></div>`:''}
-      <div class="ctrl-group" style="margin-left:auto;font-size:11px;color:var(--txt-faint);max-width:420px">Click a column to sort. ${BD_VIEW==='player'?'Players are ranked on rucks they arrived at in defence; use the team filter at the top to show one team.':'Team filter at the top highlights that team.'}</div>
+      <div class="ctrl-group" style="margin-left:auto;font-size:11px;color:var(--txt-faint);max-width:420px">Click a column to sort. “1 in 29.9” = one every 29.9 rucks — lower is more often. ${BD_VIEW==='player'?'Players are ranked on rucks they arrived at in defence; use the team filter at the top to show one team.':'Team filter at the top highlights that team.'}</div>
     </div>
     ${content}`;
   // show 10 rows then scroll
