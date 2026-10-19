@@ -199,6 +199,31 @@ select:focus{border-color:var(--green)}
 .td-num{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px}
 .res-w{color:var(--green);font-weight:700}.res-l{color:var(--red);font-weight:700}.res-d{color:var(--txt-dim);font-weight:600}
 
+/* ==== DEFENSIVE RUCKS ==== */
+.bd-wrap{background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:var(--shadow);overflow:auto}
+.bd-table{width:100%;border-collapse:collapse;font-size:12px}
+.bd-table thead th{position:sticky;background:#fafbfa;z-index:1;font-size:9.5px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--txt-dim);padding:7px 8px;white-space:nowrap;border-bottom:1px solid var(--border)}
+.bd-table thead tr.bd-grp th{top:0;padding:5px 8px 0;border-bottom:none;height:20px}
+.bd-table thead tr:not(.bd-grp) th{top:20px}
+.bd-table th.bd-num{cursor:pointer;text-align:right}
+.bd-table th.bd-num:hover{color:var(--green)}
+.bd-table th.bd-on{color:var(--green)}
+.bd-bep-h{text-align:center!important;color:#7a3fb0!important;border-bottom:2px solid #d9c6ec!important}
+.bd-table td{padding:6px 8px;border-bottom:1px solid var(--border-light);white-space:nowrap}
+.bd-table td.bd-num{text-align:right;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:14px;font-variant-numeric:tabular-nums}
+.bd-table td.bd-on{background:rgba(26,107,62,.05)}
+.bd-table td.bd-bep,.bd-table th.bd-bep{background-color:rgba(122,63,176,.04)}
+.bd-table tr:hover td{background:#f7fbf8}
+.bd-table tr.bd-hl td{background:rgba(26,107,62,.12);font-weight:700}
+.bd-rk{width:30px}
+.bd-name{text-align:left;max-width:220px;overflow:hidden;text-overflow:ellipsis}
+.bd-team{color:var(--txt-faint);font-size:11px}
+.bd-rate{display:flex;flex-direction:column;align-items:flex-end;gap:2px;min-width:70px}
+.bd-rate i{display:block;height:4px;border-radius:2px;background:var(--green);align-self:stretch;max-width:100%}
+.bd-tbtn{font-size:11px;font-weight:600;padding:5px 12px;border-radius:7px;border:1px solid var(--border);background:var(--card);color:var(--txt-dim)}
+.bd-tbtn.on{background:var(--green);color:#fff;border-color:var(--green)}
+.bd-note{background:#fff4e0;color:#9a5a00;border-radius:8px;padding:8px 12px;font-size:12px;margin-bottom:12px}
+
 /* ==== TRENDS ==== */
 .ctrl-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:flex-end}
 .t-section{margin-bottom:22px}
@@ -680,6 +705,10 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
         Ref Stats
       </button>
+      <button class="nav-btn" id="nav-breakdown" onclick="setTab('breakdown')">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+        Defensive Rucks
+      </button>
       <button class="nav-btn editor-up" id="nav-irfu" onclick="setTab('irfu')" style="display:none">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         IRFU Depth Chart
@@ -709,6 +738,7 @@ tr.sel-row td{background:var(--green-dim)!important;color:var(--green)!important
     <div class="panel" id="panel-trends-tot"><div id="tr-tot"></div></div>
     <div class="panel" id="panel-referee"><div id="rf"></div></div>
     <div class="panel" id="panel-refstats"><div id="rs"></div></div>
+    <div class="panel" id="panel-breakdown"><div id="bd"></div></div>
     <div class="panel" id="panel-irfu"><div id="irfu"></div></div>
     <div class="panel" id="panel-data"><div id="dt"></div></div>
     <div class="panel" id="panel-users"><div id="us"></div></div>
@@ -992,18 +1022,25 @@ function logout(){
 }
 
 // ===== DATA LOADING =====
+function fixTurnovers(m){
+  const st=m&&m.stats;if(!st||!m.hid||!m.aid)return m;
+  const h=st[m.hid],a=st[m.aid];if(!h||!a||h.toV===2)return m;
+  const hl=h.to||0,al=a.to||0;
+  h.toL=hl;a.toL=al;h.to=al;a.to=hl;h.toV=2;a.toV=2;
+  return m;
+}
 async function loadMatches(){
   try{
     const snap=await FIRESTORE.collection('matches').get();
     const docs=snap&&snap.docs?snap.docs:(Array.isArray(snap)?snap:[]);
-    MATCHES=docs.map(d=>typeof d.data==='function'?d.data():d).filter(Boolean);
+    MATCHES=docs.map(d=>typeof d.data==='function'?d.data():d).filter(Boolean).map(fixTurnovers);
   }catch(e){MATCHES=[];}
 }
 async function saveMatchToDB(m){
   const id=matchDocId(m);
   const doc={id,fname:m.fname||'',date:m.date||'',week:m.week||'',tour:m.tour||'',tourN:m.tourN||'',
     hid:m.hid||'',hn:m.hn||'',aid:m.aid||'',an:m.an||'',hs:m.hs||0,as:m.as||0,
-    rid:m.rid||'',rn:m.rn||'',stats:m.stats||{}};
+    rid:m.rid||'',rn:m.rn||'',stats:m.stats||{},players:m.players||{}};
   await FIRESTORE.doc(`matches/${id}`).set(doc);
   return id;
 }
@@ -1026,13 +1063,16 @@ function parseXML(text,fname){
       hs:+fd.getAttribute('HTFTSC')||0,as:+fd.getAttribute('ATFTSC')||0,
       rid:fd.getAttribute('REFID')||'',rn:fd.getAttribute('REFNAME')||'Unknown',rows:[]};
     fxid.querySelectorAll('ActionRow').forEach(r=>{
-      m.rows.push({tid:r.getAttribute('team_id')||'',x:+r.getAttribute('x_coord')||0,y:+r.getAttribute('y_coord')||0,
+      m.rows.push({pl:r.getAttribute('PLID')||'',q5:r.getAttribute('qualifier5')||'',tid:r.getAttribute('team_id')||'',x:+r.getAttribute('x_coord')||0,y:+r.getAttribute('y_coord')||0,
         a:r.getAttribute('action')||'',at:r.getAttribute('ActionType')||'',ar:r.getAttribute('Actionresult')||'',
         q3:r.getAttribute('qualifier3')||'',q4:r.getAttribute('qualifier4')||'',sid:r.getAttribute('sequence_id')||'',
         mt:+r.getAttribute('MatchTime')||0,period:+r.getAttribute('period')||1});
     });
     m.rowCount=m.rows.length;
+    const roster={};
+    fxid.querySelectorAll('TeamData Player').forEach(p=>{roster[p.getAttribute('PLID')]={n:`${p.getAttribute('PLFORN')||''} ${p.getAttribute('PLSURN')||''}`.trim(),tid:p.getAttribute('Club')||''};});
     m.stats=calcStats(m);
+    m.players=calcPlayers(m,roster);
     delete m.rows;
     out.push(m);
   });
@@ -1046,7 +1086,7 @@ function parseXML(text,fname){
 // ActionType: 246=Yellow, 247=Red, 295=Conversion, 296=Drop Goal, 297=Penalty Goal, 299=Goal Kicked
 function calcStats(m){
   const s={};
-  [m.hid,m.aid].forEach(tid=>{s[tid]={pen:0,penW:0,fkC:0,fkW:0,inf:{},fkInf:{},locs:[],timeline:[],fkTimeline:[],cards:[],tries:0,conv:0,penG:0,dg:0,yel:0,red:0,loW:0,loT:0,scrum:0,scrumW:0,scrumT:0,to:0,jackal:0,jackalAtt:0,counterRuck:0,_sq:{}};});
+  [m.hid,m.aid].forEach(tid=>{s[tid]={pen:0,penW:0,fkC:0,fkW:0,inf:{},fkInf:{},locs:[],timeline:[],fkTimeline:[],cards:[],tries:0,conv:0,penG:0,dg:0,yel:0,red:0,loW:0,loT:0,scrum:0,scrumW:0,scrumT:0,to:0,toL:0,toV:2,jackal:0,jackalFail:0,jackalAtt:0,counterRuck:0,noInt:0,defRucks:0,defArr:0,_sq:{}};});
   m.rows.forEach(r=>{
     const t=s[r.tid];if(!t)return;
     // Dedup events that repeat per-player within the same incident.
@@ -1098,15 +1138,146 @@ function calcStats(m){
     if(r.a==='6'){t.loT++;if(r.ar==='376'||r.ar==='378')t.loW++;}
     // Offensive Scrum: action=28 (deduped); ar 353=Won Outright, 357=Won Penalty
     if(r.a==='28'){t.scrumT++;t.scrum++;if(r.ar==='353'||r.ar==='357')t.scrumW++;}
-    // Turnovers: action=8 (deduped)
-    if(r.a==='8'){t.to++;}
-    // Jackal Won: action=40, ActionType=561 (deduped); Jackal Attempt: any action=40
-    if(r.a==='40'){t.jackalAtt++;if(r.at==='561')t.jackal++;}
-    // Counter Ruck Attempt: action=29 (deduped)
-    if(r.a==='29'){t.counterRuck++;}
+    // Turnovers: action=8 (deduped). Opta codes it to the team that LOST the ball
+    // → toL = turnovers lost for this team, to = turnovers won for the opposition
+    if(r.a==='8'){t.toL++;const oppId=r.tid===m.hid?m.aid:m.hid;if(s[oppId])s[oppId].to++;}
+    // Ruck: action=23, team_id = team in possession → a defensive ruck for the other team
+    if(r.a==='23'){const oppId=r.tid===m.hid?m.aid:m.hid;if(s[oppId])s[oppId].defRucks++;}
+    // Defensive ruck arrival: action=43 (Ruck OOA), qualifier4=633 (Defensive OOA)
+    // back-end pressure in qualifier5: 801 Jackal Attempt, 802 Counter Ruck Attempt, 803 Other/No Intention
+    if(r.a==='43'&&r.q4==='633'){t.defArr++;if(r.q5==='801')t.jackalAtt++;else if(r.q5==='802')t.counterRuck++;else if(r.q5==='803')t.noInt++;}
+    // Jackal: action=18 (Collection), ActionType=276; Actionresult 277=Success, 278=Fail
+    if(r.a==='18'&&r.at==='276'){if(r.ar==='277')t.jackal++;else if(r.ar==='278')t.jackalFail++;}
   });
   [m.hid,m.aid].forEach(tid=>{if(s[tid])delete s[tid]._sq;});
   return s;
+}
+
+
+// ===================== DEFENSIVE RUCKS / BREAKDOWN =====================
+// Opta codes (ChangesFile): action 23 = Ruck (team_id = attacking team)
+// action 43 = Ruck OOA; qualifier4 633 = Defensive OOA (a defender arriving at the ruck)
+//   qualifier5 = back-end pressure: 801 Jackal Attempt, 802 Counter Ruck Attempt, 803 Other/No Intention
+// action 18 ActionType 276 = Jackal; Actionresult 277 = Success (jackal won), 278 = Fail
+function calcPlayers(m,roster){
+  const P={};
+  const get=(plid,tid)=>{
+    if(!P[plid]){const ro=roster[plid]||{};P[plid]={n:ro.n||('Player '+plid),tid:ro.tid||tid,arr:0,b1:0,b2:0,b3:0,j:0,jf:0};}
+    return P[plid];
+  };
+  m.rows.forEach(r=>{
+    if(!r.pl||r.pl==='0')return;
+    if(r.a==='43'&&r.q4==='633'){
+      const p=get(r.pl,r.tid);p.arr++;
+      if(r.q5==='801')p.b1++;else if(r.q5==='802')p.b2++;else if(r.q5==='803')p.b3++;
+    }
+    if(r.a==='18'&&r.at==='276'){const p=get(r.pl,r.tid);if(r.ar==='277')p.j++;else if(r.ar==='278')p.jf++;}
+  });
+  return P;
+}
+let BD_VIEW='team',BD_SORT={team:'jPer',player:'jPer'},BD_MIN_RUCKS=5,BD_SEARCH='';
+const BD_TEAM_COLS=[
+  {k:'games',l:'Games',fmt:'n'},
+  {k:'defRucks',l:'Def Rucks',fmt:'n',tip:'Rucks the opposition had (rucks this team defended)'},
+  {k:'jackal',l:'Jackals',fmt:'n',tip:'Jackals won (Opta Jackal – Success)'},
+  {k:'jackalAtt',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
+  {k:'counterRuck',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
+  {k:'noInt',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
+  {k:'jaPer',l:'Jackal Att / Def Ruck',fmt:'pct',tip:'Jackal attempts ÷ defensive rucks'},
+  {k:'jPer',l:'Jackals / Def Ruck',fmt:'pct',tip:'Jackals won ÷ defensive rucks'},
+];
+const BD_PLAYER_COLS=[
+  {k:'games',l:'Games',fmt:'n'},
+  {k:'arr',l:'Rucks Attended',fmt:'n',tip:'Defensive rucks the player arrived at (Opta Defensive OOA)'},
+  {k:'j',l:'Jackals',fmt:'n',tip:'Jackals won'},
+  {k:'b1',l:'Jackal Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Jackal Attempt'},
+  {k:'b2',l:'Counter Ruck Att',fmt:'n',grp:'bep',tip:'Back-end pressure: Counter Ruck Attempt'},
+  {k:'b3',l:'No Intention',fmt:'n',grp:'bep',tip:'Back-end pressure: Other / No Intention'},
+  {k:'jaPer',l:'Jackal Att / Ruck',fmt:'pct',tip:'Jackal attempts ÷ rucks attended'},
+  {k:'jPer',l:'Jackals / Ruck',fmt:'pct',tip:'Jackals won ÷ rucks attended'},
+];
+function bdBaseMatches(){
+  // like Rankings: competition / referee / date filters apply; team filter highlights instead of hiding
+  const f=GLOBAL_FILTERS;let ms=[...MATCHES];
+  if(f.tours&&f.tours.length)ms=ms.filter(m=>f.tours.some(t=>String(t)===String(m.tour)));
+  if(f.ref)ms=ms.filter(m=>m.rid===f.ref);
+  if(f.dateFrom){const d=ddmmToISO(f.dateFrom);ms=ms.filter(m=>ddmmToISO(m.date)>=d);}
+  if(f.dateTo){const d=ddmmToISO(f.dateTo);ms=ms.filter(m=>ddmmToISO(m.date)<=d);}
+  return ms;
+}
+function bdSort(view,k){
+  BD_SORT[view]=BD_SORT[view]===k?'-'+k:k;
+  renderBreakdown();
+}
+function bdTable(rows,cols,view,nameCol,focusIds){
+  const sk=BD_SORT[view],asc=sk.startsWith('-'),key=sk.replace(/^-/,'');
+  rows.sort((a,b)=>asc?(a[key]-b[key]):(b[key]-a[key])||(b.defRucks||b.arr||0)-(a.defRucks||a.arr||0));
+  const max={};cols.forEach(c=>{max[c.k]=Math.max(...rows.map(r=>r[c.k]||0),0)||1;});
+  const val=(r,c)=>c.fmt==='pct'?(r[c.k]*100).toFixed(1)+'%':(r[c.k]||0);
+  const hdr=`<tr><th class="bd-rk">#</th>${nameCol.map(n=>`<th class="bd-name">${n}</th>`).join('')}${cols.map(c=>`<th class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}" title="${c.tip||''}" onclick="bdSort('${view}','${c.k}')">${c.l}${key===c.k?(asc?' ▲':' ▼'):''}</th>`).join('')}</tr>`;
+  const grp=`<tr class="bd-grp"><th></th>${nameCol.map(()=>'<th></th>').join('')}${cols.map((c,i)=>c.grp?(i===0||!cols[i-1].grp?`<th colspan="${cols.filter(x=>x.grp).length}" class="bd-bep-h">Back-end pressure</th>`:''):'<th></th>').join('')}</tr>`;
+  const body=rows.map((r,i)=>{
+    const hl=focusIds&&focusIds.includes(r.tid||r.id);
+    const rk=i+1,rc=rk===1?'rank-1':rk===2?'rank-2':rk===3?'rank-3':'';
+    return`<tr class="${hl?'bd-hl':''}${rk===10?' bd-10':''}"><td class="bd-rk"><span class="rank-badge ${rc}">${rk}</span></td>
+      ${r.cells.map(c=>`<td class="bd-name">${c}</td>`).join('')}
+      ${cols.map(c=>{const pct=Math.round(((r[c.k]||0)/max[c.k])*100);
+        return`<td class="bd-num${c.grp?' bd-bep':''}${key===c.k?' bd-on':''}">${c.fmt==='pct'?`<div class="bd-rate"><span>${val(r,c)}</span><i style="width:${pct}%"></i></div>`:val(r,c)}</td>`;}).join('')}</tr>`;
+  }).join('');
+  return`<div class="bd-wrap" data-view="${view}"><table class="bd-table"><thead>${grp}${hdr}</thead><tbody>${body||`<tr><td colspan="${cols.length+1+nameCol.length}" class="no-data">No data</td></tr>`}</tbody></table></div>`;
+}
+function renderBreakdown(){
+  const el=document.getElementById('bd');if(!el)return;
+  if(!MATCHES.length){el.innerHTML=`<div class="empty-state"><div class="es-icon">🏉</div><h2>No data yet</h2><p>Upload XML files to see breakdown data.</p></div>`;return;}
+  const ms=bdBaseMatches();
+  const withBd=ms.filter(m=>Object.values(m.stats||{}).some(s=>s&&s.defRucks!==undefined));
+  const focus=(GLOBAL_FILTERS.teams||[]);
+  let content='';
+  if(BD_VIEW==='team'){
+    const T={};
+    withBd.forEach(m=>[m.hid,m.aid].forEach(tid=>{
+      const s=(m.stats||{})[tid]||{};
+      const t=T[tid]=T[tid]||{id:tid,n:tid===m.hid?m.hn:m.an,games:0,defRucks:0,jackal:0,jackalAtt:0,counterRuck:0,noInt:0};
+      t.games++;t.defRucks+=s.defRucks||0;t.jackal+=s.jackal||0;t.jackalAtt+=s.jackalAtt||0;t.counterRuck+=s.counterRuck||0;t.noInt+=s.noInt||0;
+    }));
+    const rows=Object.values(T).map(t=>({...t,jaPer:t.defRucks?t.jackalAtt/t.defRucks:0,jPer:t.defRucks?t.jackal/t.defRucks:0,cells:[irfuEsc(t.n)]}));
+    content=bdTable(rows,BD_TEAM_COLS,'team',['Team'],focus);
+  }else{
+    const P={};
+    withBd.forEach(m=>Object.entries(m.players||{}).forEach(([id,p])=>{
+      const x=P[id]=P[id]||{id,n:p.n,tid:p.tid,tn:'',games:0,arr:0,b1:0,b2:0,b3:0,j:0,jf:0};
+      x.games++;['arr','b1','b2','b3','j','jf'].forEach(k=>x[k]+=p[k]||0);
+      x.tid=p.tid;x.tn=p.tid===m.hid?m.hn:p.tid===m.aid?m.an:x.tn;
+    }));
+    const q=BD_SEARCH.toLowerCase().trim();
+    let rows=Object.values(P).filter(p=>p.arr>=BD_MIN_RUCKS||(q&&p.n.toLowerCase().includes(q)));
+    if(focus.length)rows=rows.filter(p=>focus.includes(p.tid));
+    if(q)rows=rows.filter(p=>p.n.toLowerCase().includes(q)||(p.tn||'').toLowerCase().includes(q));
+    rows=rows.map(p=>({...p,jaPer:p.arr?p.b1/p.arr:0,jPer:p.arr?p.j/p.arr:0,cells:[irfuEsc(p.n),`<span class="bd-team">${irfuEsc(p.tn||'')}</span>`]}));
+    content=bdTable(rows,BD_PLAYER_COLS,'player',['Player','Team'],null);
+  }
+  const missing=ms.length-withBd.length;
+  const btn=(v,l)=>`<button onclick="BD_VIEW='${v}';renderBreakdown()" class="bd-tbtn${BD_VIEW===v?' on':''}">${l}</button>`;
+  el.innerHTML=`
+    <div class="page-hdr"><h2>Defensive Rucks</h2><p>${withBd.length} match${withBd.length!==1?'es':''} with ruck data · back-end pressure &amp; jackals</p></div>
+    ${missing?`<div class="bd-note">⚠️ ${missing} match${missing!==1?'es were':' was'} imported before ruck data was added — re-import them from the Data tab (<b>Re-import all</b>) to include them.</div>`:''}
+    <div class="ctrl-row" style="margin-bottom:12px">
+      <div class="ctrl-group"><div class="ctrl-lbl">View</div><div style="display:flex;gap:5px">${btn('team','Teams')}${btn('player','Players')}</div></div>
+      ${BD_VIEW==='player'?`
+      <div class="ctrl-group"><div class="ctrl-lbl">Min. rucks attended</div>
+        <select onchange="BD_MIN_RUCKS=+this.value;renderBreakdown()">${[1,3,5,10,15,20,30].map(n=>`<option value="${n}"${n===BD_MIN_RUCKS?' selected':''}>${n}+</option>`).join('')}</select></div>
+      <div class="ctrl-group"><div class="ctrl-lbl">Search player / team</div>
+        <input id="bd-search" type="text" class="flt-date" placeholder="Type a name…" value="${irfuEsc(BD_SEARCH)}" oninput="BD_SEARCH=this.value;renderBreakdown()" style="min-width:200px"></div>`:''}
+      <div class="ctrl-group" style="margin-left:auto;font-size:11px;color:var(--txt-faint);max-width:420px">Click a column to sort. ${BD_VIEW==='player'?'Players are ranked on rucks they arrived at in defence; use the team filter at the top to show one team.':'Team filter at the top highlights that team.'}</div>
+    </div>
+    ${content}`;
+  // show 10 rows then scroll
+  requestAnimationFrame(()=>{
+    const w=el.querySelector('.bd-wrap'),r10=el.querySelector('tr.bd-10');
+    if(w&&r10){w.style.maxHeight=(r10.offsetTop+r10.offsetHeight+1)+'px';}
+    const si=document.getElementById('bd-search');
+    if(si&&BD_SEARCH&&document.activeElement!==si&&BD_VIEW==='player'){si.focus();si.setSelectionRange(si.value.length,si.value.length);}
+  });
 }
 
 // ===== SCREEN MANAGEMENT =====
@@ -1131,20 +1302,21 @@ function showApp(){
 }
 function setTab(t){
   TAB=t;
-  ['overview','rankings','trends','trends-tot','referee','refstats','irfu','data','users'].forEach(x=>{
+  ['overview','rankings','trends','trends-tot','referee','refstats','breakdown','irfu','data','users'].forEach(x=>{
     const p=document.getElementById('panel-'+x);
     const n=document.getElementById('nav-'+x);
     if(p)p.classList.toggle('active',x===t);
     if(n)n.classList.toggle('active',x===t);
   });
   const gf=document.getElementById('gfbar');
-  const showGF=['overview','rankings','trends','trends-tot','referee','refstats'];
+  const showGF=['overview','rankings','trends','trends-tot','referee','refstats','breakdown'];
   if(gf){if(showGF.includes(t)&&MATCHES.length){gf.style.display='flex';renderGlobalFilters();}else{gf.style.display='none';}}
   if(t==='rankings')renderRankings();
   if(t==='trends')renderTR();
   if(t==='trends-tot')renderTRTot();
   if(t==='referee')renderRF();
   if(t==='refstats')renderRefStats();
+  if(t==='breakdown')renderBreakdown();
   if(t==='data')renderData();
   if(t==='users')renderUsers();
   if(t==='overview')renderOV();
@@ -1258,6 +1430,7 @@ const RANK_METRICS=[
   {k:'loW%',l:'Lineout Win %',lower:false,col:'#2d7a4f',pct:true,dir:'↑ most on top'},
   {k:'scrumW%',l:'Scrum Win %',lower:false,col:'#4aab72',pct:true,dir:'↑ most on top'},
   {k:'to',l:'Turnovers Won',lower:false,col:'#f59f35',dir:'↑ most on top'},
+  {k:'toL',l:'Turnovers Lost',lower:false,col:'#e57373',dir:'↑ most on top'},
   {k:'jackal',l:'Jackals Won',lower:false,col:'#d4a44c',dir:'↑ most on top'},
   {k:'jackalAtt',l:'Jackal Attempts',lower:false,col:'#c4921a',dir:'↑ most on top'},
   {k:'counterRuck',l:'Counter Ruck Attempts',lower:false,col:'#7c9e5a',dir:'↑ most on top'},
@@ -3056,7 +3229,7 @@ function renderRankings(){
   const teamMap={};
   ms.forEach(m=>{
     [m.hid,m.aid].forEach(tid=>{
-      if(!teamMap[tid]){const n=tid===m.hid?m.hn:m.an;teamMap[tid]={id:tid,n,games:0,wins:0,losses:0,draws:0,pen:0,pts:0,tries:0,conv:0,penG:0,dg:0,penW:0,fkW:0,fkC:0,loW:0,loT:0,yel:0,red:0,scrum:0,scrumW:0,scrumT:0,to:0,jackal:0,jackalAtt:0,counterRuck:0};}
+      if(!teamMap[tid]){const n=tid===m.hid?m.hn:m.an;teamMap[tid]={id:tid,n,games:0,wins:0,losses:0,draws:0,pen:0,pts:0,tries:0,conv:0,penG:0,dg:0,penW:0,fkW:0,fkC:0,loW:0,loT:0,yel:0,red:0,scrum:0,scrumW:0,scrumT:0,to:0,toL:0,jackal:0,jackalAtt:0,counterRuck:0};}
       const st=m.stats[tid]||{};const t=teamMap[tid];
       t.games++;
       const tScore=tid===m.hid?m.hs:m.as;const oScore=tid===m.hid?m.as:m.hs;
@@ -3065,7 +3238,7 @@ function renderRankings(){
       t.penW+=st.penW||0;t.fkW+=st.fkW||0;t.fkC+=st.fkC||0;
       t.loW+=st.loW||0;t.loT+=st.loT||0;t.yel+=st.yel||0;t.red+=st.red||0;
       t.scrum+=st.scrum||0;t.scrumW+=st.scrumW||0;t.scrumT+=st.scrumT||0;
-      t.to+=st.to||0;t.jackal+=st.jackal||0;t.jackalAtt+=st.jackalAtt||0;t.counterRuck+=st.counterRuck||0;
+      t.to+=st.to||0;t.toL+=st.toL||0;t.jackal+=st.jackal||0;t.jackalAtt+=st.jackalAtt||0;t.counterRuck+=st.counterRuck||0;
       t.pts+=(st.tries||0)*5+(st.conv||0)*2+(st.penG||0)*3+(st.dg||0)*3;
     });
   });
@@ -4569,6 +4742,7 @@ async function dropboxScan(){
         <div style="display:flex;gap:6px">
           <button class="dbx-btn" onclick="dropboxImportSelected()">Import Selected</button>
           <button class="dbx-btn primary" onclick="dropboxImportAll()">↓ Import All New</button>
+          <button class="dbx-btn" onclick="dropboxReimportAll()" title="Re-process every XML in the folder (use after an app update adds new stats)">↻ Re-import all</button>
         </div>
       </div>
       <div class="table-wrap" style="max-height:200px;margin-bottom:10px">
@@ -4585,6 +4759,12 @@ async function dropboxScan(){
 function dropboxImportAll(){
   const paths=_dbxFiles.filter(f=>!DBX_IMPORT_LOG[f.path_lower]||DBX_IMPORT_LOG[f.path_lower].modified!==f.server_modified).map(f=>f.path_lower);
   if(!paths.length){toast('All files already imported','ok');return;}
+  dropboxImportPaths(paths);
+}
+function dropboxReimportAll(){
+  const paths=(_dbxFiles||[]).map(f=>f.path_lower);
+  if(!paths.length){toast('Scan the folder first','err');return;}
+  if(!confirm(`Re-import all ${paths.length} XML files? Existing matches are overwritten with freshly processed data (no duplicates). This can take a few minutes.`))return;
   dropboxImportPaths(paths);
 }
 function dropboxImportSelected(){
